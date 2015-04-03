@@ -1,0 +1,129 @@
+<extend name="Public/base" />
+<block name="body">
+  <div class="main-title">
+    <h2>{$meta_title}</h2>
+  </div>
+  <form action="{:U('edit')}" method="post" class="form-horizontal">
+    <input type="hidden" name="gid" value="{$field.gid}">
+    <input type="hidden" name="id" value="{$field.id}">
+    <input type="hidden" name="order" value="{$field.order}">
+    <input type="hidden" name="openid" value="{$field.openid}">
+    <div class="form-item">
+      <label class="item-label"> 姓名 <span class="check-tips">（请输入用户的姓名）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="realname" value="{$field.realname}">
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label"> 手机号 <span class="check-tips">（请输入用户的手机号）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="mobile" value="{$field.mobile}">
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label"> email <span class="check-tips">（请输入用户的email）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="email" value="{$field.email}">
+      </div>
+    </div>
+        <div class="form-item">
+      <label class="item-label"> 修改客户信息 <span class="check-tips">（是否可以在前台修改用户的信息）</span> </label>
+      <div class="controls">
+         <label class="radio">
+          <input type="radio" <eq name="field.save" value="1">checked='checked'</eq> name="save" value="1">
+          是</label>
+        <label class="radio">
+          <input type="radio" <eq name="field.save" value="0">checked='checked'</eq> name="save" value="0">
+          否</label>
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label"> 邀请码 <span class="check-tips">（请输入用户的邀请码）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="code" value="{$field.code}">
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label"> 公司 <span class="check-tips">（请选择用户的公司）</span> </label>
+      <div class="controls">
+        <select name="companyid" id="company" onchange="changeCompany(this)" >
+          <option value="">请选择公司</option>
+          <foreach name="company" item="vo">
+            <option value="{$vo.id}" <if condition="$vo.id eq $field['companyid']">selected='selected'</if>>{$vo.title}</option>
+          </foreach>
+        </select>
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label"> 部门 <span class="check-tips">（请选择用户的部门）</span> </label>
+      <div class="controls">
+        <select name="departmentid" id="department">
+          <notempty name="field.department">
+          <option value="{$field.departmentid}">{$field.department}</option>
+          <else />  
+          <option value="">请选择部门</option>
+          </notempty>
+        </select>
+      </div>
+    </div>
+        <div class="form-item">
+      <label class="item-label"> 工业电子id <span class="check-tips">（请选择用户的工业电子id）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="eid" value="{$field.eid}">
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label"> 用户标签 <span class="check-tips">（可以为空）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="label" value="{$field.label}">
+      </div>
+      <div class="clear blank10"></div>
+        <ul class="keylist">
+            <foreach name="usertags" item="vo">
+            <li>{$vo.title}</li>
+            </foreach>
+        </ul>
+    </div>
+    <div class="blank15"></div>
+    <div class="form-item">
+      <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+      <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+    </div>
+  </form>
+</block>
+<block name="script">
+  <script type="text/javascript">
+   $(function(){
+        $('.keylist li').each(function(index){
+           $(this).click(function(){
+              oldkey = $("input[name='label']").val();
+              oldkey =  oldkey ? oldkey + ',' : oldkey; 
+              num=(oldkey.split(',')).length-1; 
+              if (num>4) {
+                alert('用户标签最多5个')
+                return false;
+              };
+              key = oldkey + $(this).html()
+              _str =$("input[name='label']").val(key)
+           })
+        })
+    })
+    highlight_subnav('{:U('Member/index',array('gid'=>$field['gid']))}');
+
+      function changeCompany (obj) {
+      $('#department').html("<option value=''>请选择部门</option>");
+      var companyid = $(obj).val();
+      if( companyid ){
+         $.post( "{:U('changeCompany')}", { companyid:companyid } , function(data){
+         if( data ) {
+            $(data).each(function(i){
+                department = data[i];
+                html =  " <option value=" + department.id + ">" + department.title +"</option>" + "\n";
+                $('#department').append(html);
+            })
+         }
+        },'json' )
+      }
+    }
+  </script>
+</block>

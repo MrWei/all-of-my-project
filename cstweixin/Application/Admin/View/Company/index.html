@@ -1,0 +1,92 @@
+<extend name="Public/base"/>
+<block name="body">
+  <!-- 表格列表 -->
+  <div class="main-title">
+    <h2>{$meta_title}</h2>
+  </div>
+  <div class="cf"> 
+    <div class="fl">
+        <a class="btn" href="{:U('add')}">新增</a>
+        <button class="btn ajax-post confirm" url="{:U('Action/dodelete',array('method'=>'company'))}" target-form="ids">删除</button>
+    </div>
+    <!-- 高级搜索 -->
+    <div class="search-form fr cf">
+     <div class="sleft">
+        <input type="text" name="keywords" class="search-input" value="{:I('keywords')}" placeholder="请输入公司名称关键字">
+        <a class="sch-btn" href="javascript:;" id="search" url="{:U('index')}"><i class="btn-search"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="data-table table-striped"> 
+    <!--  -->
+    <table class="">
+      <thead>
+        <tr>
+          <th class="row-selected row-selected" width="30"><input class="check-all" type="checkbox"/></th>
+          <th width="30">编号</th>
+          <th width="">名称</th>
+          <th width="100">子栏目</th>
+          <th width="100">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <empty name="indexlist">
+          <tr>
+            <td colspan='3' style='text-align:center'> {:C('EMPTY_DATA')}</td>
+          </tr>
+          <else />
+         <foreach name="indexlist" item="vo">
+          <tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.id}" /></td>
+           <td>{$vo.id}</td>
+           <td>{$vo.title}</td>
+           <td><a href="{:U('add',array('pid'=>$vo['id']))}">添加部门</a></td>
+           <td>
+            <a href="{:U('edit',array('id'=>$vo['id'],'type'=>$vo['type']))}">编辑</a>
+            <a href="{:U('deletedo',array('method'=>'company','id'=>$vo['id']))}" class="confirm ajax-get">删除</a></td>
+          </tr>
+        <foreach name="vo._child" item="vo1">
+          <tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo1.id}" /></td>
+           <td>{$vo1.id}</td>
+           <td>|——{$vo1.title}</td>
+           <td></td>
+           <td>
+            <a href="{:U('edit',array('id'=>$vo1['id'],'type'=>$vo1['type']))}">编辑</a>
+            <a href="{:U('deletedo',array('method'=>'company','id'=>$vo1['id']))}" class="confirm ajax-get">删除</a></td>
+          </tr>
+        </foreach>  
+         </foreach>
+        </empty> 
+      </tbody>
+    </table>
+    <!--  -->
+    <div class="page">{$_page}</div>
+  </div>
+  <!-- /表格列表 --> 
+</block>
+<block name="script">
+  <script type="text/javascript">
+    //搜索功能
+  $("#search").click(function(){
+    var url = $(this).attr('url');
+        var query  = $('.search-form').find('input').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+        query = query.replace(/^&/g,'');
+        if( url.indexOf('?')>0 ){
+            url += '&' + query;
+        }else{
+            url += '?' + query;
+        }
+    window.location.href = url;
+  });
+  //回车搜索
+  $(".search-input").keyup(function(e){
+    if(e.keyCode === 13){
+      $("#search").click();
+      return false;
+    }
+  });
+   highlight_subnav('{:U('Company/index')}');
+</script>
+</block>

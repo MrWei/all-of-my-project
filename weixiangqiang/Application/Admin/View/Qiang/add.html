@@ -1,0 +1,632 @@
+<extend name="Public/base"/>
+<block name="body">
+  <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+  <script type="text/javascript">
+    $(function(){
+        //选项卡
+        $('ul.tab-nav li').each(function(index){
+          $(this).click(function(){
+            $(this).addClass('current').siblings('li').removeClass('current');
+            $('.activityTab').eq(index).show();
+            $('.activityTab').eq(index).siblings('.activityTab').hide()
+          })  
+        })
+        //开始时间
+      $('#starttime').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii:ss',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+        });
+        //结束时间
+        $('#endtime').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii:ss',
+            language:"zh-CN",
+            minView:2,
+            autoclose:true
+        });
+      })
+  </script>
+  <div class="main-title">
+    <h2>{$info['id']?'编辑':'添加'}活动</h2>
+  </div>
+  <div class="tab-wrap">
+    <ul class="tab-nav nav">
+      <li class="current"><a href="javascript:void(0)">基本</a></li>
+      <li ><a href="javascript:void(0)">账号</a></li>
+      <li ><a href="javascript:void(0)">开幕墙</a></li>
+      <li ><a href="javascript:void(0)">许愿墙</a></li>
+      <li ><a href="javascript:void(0)">微信墙</a></li>
+      <li ><a href="javascript:void(0)">抽奖</a></li>
+      <li ><a href="javascript:void(0)">微评分</a></li>
+      <li ><a href="javascript:void(0)">闭幕墙</a></li>
+    </ul>
+    <div class="tab-content">
+      <form action="{:U('update')}" method="post" class="form-horizontal">
+        <input type="hidden" name="admin_id" value="{$Think.uid}">
+        <!-- 基本开始  -->
+        <div class="activityTab" style="display:block">
+          <div class="form-item">
+            <label class="item-label">活动名称<span class="check-tips">（网站标题前台显示标题）</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="title" value="">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">大屏幕标题<span class="check-tips">(在大屏幕上方滚动的内容)</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="stitle" value="">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">活动开始时间<span class="check-tips"></span> </label>
+            <div class="controls">
+              <input type="text" id="starttime" name="starttime" class="text input-large" value="" placeholder="活动开始时间" />
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">活动结束时间<span class="check-tips"></span> </label>
+            <div class="controls">
+              <input type="text" id="endtime" name="endtime" class="text input-large" value="" placeholder="活动结束时间" />
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">大屏幕LOGO<span class="check-tips">(上传宽度不大于300px，高度为80px的png格式图片一张)</span> </label>
+               <div class="controls">
+                  <input type="text" class="text input-large" id="screen_logo_value" value="">
+                  <input type="file" id="screen_logo_file">
+                  <input type="hidden" name="screen_logo" id="screen_logo"/>
+                </div>
+                <script type="text/javascript">
+                //上传图片
+                  /* 初始化上传插件 */
+                $("#screen_logo_file").uploadify({
+                      "height"          : 28,
+                      "swf"             : "__STATIC__/uploadify/uploadify.swf",
+                      "fileObjName"     : "download",
+                      "buttonText"      : "上传图片",
+                      "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+                      "width"           : 80,
+                      'removeTimeout'   : 1,
+                      'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+                      "onUploadSuccess" : uploadPicturescreen_logo,
+                      'onFallback' : function() {
+                          alert('未检测到兼容版本的Flash.');
+                      }
+                  });
+                function uploadPicturescreen_logo(file, data){
+                    var data = $.parseJSON(data);
+                    //console.log(data)
+                    var src = '';
+                      if(data.status){
+                        src = data.url || '__ROOT__' + data.path;
+                        $('#screen_logo_value').val( '__ROOT__' + src);
+                        $("#screen_logo").val(data.id);
+                      } else {
+                        updateAlert(data.info);
+                        setTimeout(function(){
+                              $('#top-alert').find('button').click();
+                              $(that).removeClass('disabled').prop('disabled',false);
+                          },1500);
+                      }
+                  }
+                </script>
+            </div>
+          <div class="form-item">
+            <label class="item-label">右上角图片<span class="check-tips"></span> </label>
+               <div class="controls">
+                  <input type="text" class="text input-large" id="top_right_value" value="">
+                  <input type="file" id="top_right_file">
+                  <input type="hidden" name="top_right" id="top_right"/>
+                </div>
+                <script type="text/javascript">
+                  /* 初始化上传插件 */
+                $("#top_right_file").uploadify({
+                      "height"          : 28,
+                      "swf"             : "__STATIC__/uploadify/uploadify.swf",
+                      "fileObjName"     : "download",
+                      "buttonText"      : "上传图片",
+                      "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+                      "width"           : 80,
+                      'removeTimeout'   : 1,
+                      'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+                      "onUploadSuccess" : uploadPicturetop_right,
+                      'onFallback' : function() {
+                          alert('未检测到兼容版本的Flash.');
+                      }
+                  });
+                function uploadPicturetop_right(file, data){
+                    var data = $.parseJSON(data);
+                    // console.log(data)
+                    var src = '';
+                      if(data.status){
+                        src = data.url || '__ROOT__' + data.path;
+                        $('#top_right_value').val( '__ROOT__' + src);
+                        $("#top_right").val(data.id);
+                      } else {
+                        updateAlert(data.info);
+                        setTimeout(function(){
+                              $('#top-alert').find('button').click();
+                              $(that).removeClass('disabled').prop('disabled',false);
+                          },1500);
+                      }
+                  }
+                </script>
+            </div>
+
+
+          <div class="form-item">
+            <label class="item-label">启动标志<span class="check-tips">(在开启组合签到时使用；如果已经签到完毕，再发送此标志会触发图文签到
+              （图片和文字同在一条信息内）功能。)</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="start_mark" value="#">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">签到方式<span class="check-tips">推荐使用“命令签到”方式，签到命令可有效的过滤非现场用户，
+              防止非现场用户发的信息上墙及参与抽奖。</span> </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" name="regis" value="0">
+                不签到</label>
+              <label class="radio">
+                <input type="radio" name="regis" value="1">
+                组合签到</label>
+              <label class="radio">
+                <input type="radio" name="regis" value="2">
+                位置签到</label>
+              <label class="radio">
+                <input type="radio" checked='checked' name="regis" value="3">
+                命令签到</label>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">组合签到选项<span class="check-tips">电话：包含座机和手机</span> </label>
+            <div class="controls">
+              <label class="checkbox">
+                <input type="checkbox" name="is_dev[]" value="1">
+                照片</label>
+              <label class="checkbox">
+                <input type="checkbox" name="is_dev[]" value="2">
+                姓名</label>
+              <label class="checkbox">
+                <input type="checkbox" name="is_dev[]" value="3">
+                性别</label>
+              <label class="checkbox">
+                <input type="checkbox" name="is_dev[]" value="4">
+                电话</label>
+              <label class="checkbox">
+                <input type="checkbox" name="is_dev[]" value="5">
+                手机</label>
+              <label class="checkbox">
+                <input type="checkbox" name="is_dev[]" value="6">
+                QQ</label>
+              <label class="checkbox">
+                <input type="checkbox" name="is_dev[]" value="7">
+                电话</label>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">活动位置<span class="check-tips">(仅位置签到填写，需要输入：纬度,经度；如：39.123,114.123；)</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="location" value="">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">签到半径<span class="check-tips">(仅位置签到填写，单位：米；如：500)</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="regis_radius" value="500">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">签到命令<span class="check-tips">(当签到方式为命令签到 时此项有效，用户签到需要先发送此命令)</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="regis_cmd" value="签到">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">关注提示<span class="check-tips">(给非现场用户的提示；如无特殊要求可采用默认值；{TITLE}表示活动名称;{REGISCMD}表示签到命令;{ENDTIME}表示活动结束时间；)</span> </label>
+            <div class="controls">
+              <label class="textarea input-large600">
+                <textarea name="placard">您好，{TITLE} 正在进行，感谢您的关注！如果您在现场，请发送“{REGISCMD}”二字参与互动！{ENDTIME}活动结束后原账号功能将恢复正常。</textarea>
+              </label>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">签到提示<span class="check-tips">(当用户签到成功后会给出的提示信息，如无特殊要求请留空，留空将使用系统默认提示信息)</span> </label>
+            <div class="controls">
+              <label class="textarea input-large600">
+                <textarea name="regis_tips"></textarea>
+              </label>
+            </div>
+          </div>
+          微信
+          <div class="form-item">
+            <label class="item-label">用户信息来源<span class="check-tips">(默认使用微信头像跟呢称)</span> </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" checked='checked' name="infosource" value="0">
+                微信</label>
+              <label class="radio">
+                <input type="radio" name="infosource" value="1">
+                签到</label>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">自定义屏蔽词<span class="check-tips">(系统已经有10万+的敏感词库，包含辱骂、政治、领导人、色情等关键词，一般情况下无须设置，除非想屏蔽“加薪”这种词语。如
+              需添加请每行一条)</span> </label>
+            <div class="controls">
+              <label class="textarea input-large600">
+                <textarea name="filterkey"></textarea>
+              </label>
+            </div>
+          </div>
+        </div>
+        <!-- 基本结束  --> 
+        <!-- 账号开始 -->
+        <div class="activityTab">
+          <div class="form-item">
+            <label class="item-label">微信公号类型<span class="check-tips">微信公众平台 > 设置 > 账号信息 > 类型 </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" checked='checked' name="wxtype" value="1">
+                订阅号</label>
+                <label class="radio">
+                <input type="radio" name="wxtype" value="2">
+                订阅认证号</label>
+                <label class="radio">
+                <input type="radio" name="wxtype" value="3">
+                服务号</label>
+                <label class="radio">
+                <input type="radio" name="wxtype" value="4">
+                服务认证号</label>
+            </div>
+          </div>
+             <div class="form-item">
+            <label class="item-label">开发URL<span class="check-tips"></span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" disabled value="请到活动列表处获取URL">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">开发TOKEN<span class="check-tips"></span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="wxtoken" value="">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">微信AppId<span class="check-tips">仅认证公号填写，填写微信公众平台：功能 > 高级功能 > 开发模式 > 开发者凭据 > AppId</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="wxappid" value="">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">微信AppSecret<span class="check-tips">仅认证公号填写，填写微信公众平台：功能 > 高级功能 > 开发模式 > 开发者凭据 > AppSecret</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="wxappsecret" value="">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">微信公众账号二维码大图<span class="check-tips">推荐650*650px、360*360px的二张二维码以纵向居中对齐方式保存成一张1024*650的PNG图片。</span> </label>
+               <div class="controls">
+                  <input type="text" class="text input-large" id="ercode_value" value="">
+                  <input type="file" id="upload_ercode">
+                  <input type="hidden" name="ercode" id="ercode"/>
+                </div>
+                <script type="text/javascript">
+                  /* 初始化上传插件 */
+                $("#upload_ercode").uploadify({
+                      "height"          : 28,
+                      "swf"             : "__STATIC__/uploadify/uploadify.swf",
+                      "fileObjName"     : "download",
+                      "buttonText"      : "上传图片",
+                      "uploader"        : "{:U('File/uploadPicture',array('session_id'=>session_id()))}",
+                      "width"           : 80,
+                      'removeTimeout'   : 1,
+                      'fileTypeExts'    : '*.jpg; *.png; *.gif;',
+                      "onUploadSuccess" : uploadPictureercode,
+                      'onFallback' : function() {
+                          alert('未检测到兼容版本的Flash.');
+                      }
+                  });
+                function uploadPictureercode(file, data){
+                    var data = $.parseJSON(data);
+                    // console.log(data)
+                    var src = '';
+                      if(data.status){
+                        src = data.url || '__ROOT__' + data.path;
+                        $('#ercode_value').val( '__ROOT__' + src);
+                        $("#ercode").val(data.id);
+                      } else {
+                        updateAlert(data.info);
+                        setTimeout(function(){
+                              $('#top-alert').find('button').click();
+                              $(that).removeClass('disabled').prop('disabled',false);
+                          },1500);
+                      }
+                  }
+                </script>
+          </div>
+        </div>
+        <!-- 账号结束 --> 
+        <!-- 开幕墙开始 -->
+        <div class="activityTab">
+          <div class="form-item">
+            <label class="item-label">开幕墙<span class="check-tips"></span></label>
+            <div class="controls">
+              <textarea name="kaimuqiang">{$field.kaimuqiang|default="微久信大屏幕（超级微信墙） 开幕墙 支持文字、图片、图文内容的展示。 这里可以放置活动宣传口号、欢迎词、活动主形像等内容。 修改此处内容请登陆会员中心修改修改!"}</textarea>
+              {:hook('adminArticleEdit', array('name'=>'kaimuqiang','value'=>''))} </div>
+          </div>
+        </div>
+        <!-- 开幕墙结束 --> 
+        <!-- 许愿墙开始   -->
+        <div class="activityTab">
+          <div class="form-item">
+            <label class="item-label">版式<span class="check-tips"></span> </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" checked='checked' name="xyq_format" value="1">
+                 回收式</label>
+              <label class="radio">
+                <input type="radio" name="xyq_format" value="2">
+                圆桌式</label>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">滚屏间隔<span class="check-tips"> 单位：秒</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="xyq_wait" value="5">
+            </div>
+          </div>
+           <div class="form-item">
+            <label class="item-label">审核方式<span class="check-tips">智能+过滤：系统智能过滤，如发现敏感词将替换为*号；智能+手动：系统智能过滤，发现敏感词的将等待手动审核；手动审核：所有信息都需要手动审核；建议采用 智能+手动 的审核方式！</span> </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" name="xyq_audit" value="0">
+                智能+过滤</label>
+              <label class="radio">
+                <input type="radio" checked='checked' name="xyq_audit" value="1">
+                智能+手动</label>
+              <label class="radio">
+                <input type="radio" name="xyq_audit" value="2">
+                手动审核</label>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">许愿前缀<span class="check-tips"></span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="xyq_cmd" value="许愿">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">时间格式<span class="check-tips">大屏幕显示时间的格式，时分：12:00，月日：12.12，月日时分：12.12 12:00</span> </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" checked='checked' name="xyq_show_time" value="1">
+                时分</label>
+              <label class="radio">
+                <input type="radio" name="xyq_show_time" value="2">
+                月日</label>
+              <label class="radio">
+                <input type="radio" name="xyq_show_time" value="3">
+                楼号</label>
+              <label class="radio">
+                <input type="radio" name="xyq_show_time" value="4">
+                不显示</label>
+            </div>
+          </div>
+
+        </div>
+        <!-- 许愿墙结束   --> 
+
+        <!-- 微信墙开始   -->
+        <div class="activityTab">
+          <div class="form-item">
+            <label class="item-label">信息审核方式<span class="check-tips">①智能+过滤：系统智能过滤，如发现敏感词将替换为*号；②智能+手动：系统会智能过滤政治、领导人、辱骂、色情等敏感词汇，发现敏感词的信息将不会显示到大屏幕上，须等待手动审核；③手动审核：所有信息都需要手动审核；</span> </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" name="audit" value="0">
+                智能+过滤</label>
+              <label class="radio">
+                <input type="radio" checked='checked' name="audit" value="1">
+                智能+手动</label>
+              <label class="radio">
+                <input type="radio" name="audit" value="2">
+                手动审核</label>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">图片审核<span class="check-tips"> </span> </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" checked='checked' name="wxq_pic_audit" value="0">
+                直接通过</label>
+              <label class="radio">
+                <input type="radio" name="wxq_pic_audit" value="1">
+                手工审核</label>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">滚屏间隔<span class="check-tips">单位：秒</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="wxq_wait" value="9">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">保留页数<span class="check-tips">填写大屏幕滚动的页数，每页最多3条信息</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="retain_page" value="10">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">时间格式<span class="check-tips">大屏幕显示时间的格式，时分：12:00，月日：12.12，月日时分：12.12 12:00</span> </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" checked='checked' name="wxq_show_time" value="1">
+                时分</label>
+              <label class="radio">
+                <input type="radio" name="wxq_show_time" value="2">
+                月日</label>
+              <label class="radio">
+                <input type="radio" name="wxq_show_time" value="3">
+                楼号</label>
+              <label class="radio">
+                <input type="radio" name="wxq_show_time" value="4">
+                不显示</label>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">大屏幕公告栏<span class="check-tips">设置大屏幕右侧是否显示公告栏，公告栏处可放二维码、微信公众号以作宣传。</span> </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" name="rightswitch" value="1">
+                显示</label>
+              <label class="radio">
+                <input type="radio" checked='checked' name="rightswitch" value="0">
+                隐藏</label>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">公告栏内容<span class="check-tips"></span> </label>
+            <div class="controls">
+              <textarea name="rightcontent">{$field.rightcontent|default="[微信上墙互动步骤] ①关注公号：[此处填写公众号名称] ②发送命令：[此处填写上墙命令] ③发送内容：发送文字、表情、图片等上墙参与互动"}</textarea>
+              {:hook('adminArticleEdit', array('name'=>'rightcontent','value'=>''))} </div>
+          </div>
+        </div>
+        <!-- 微信墙结束   --> 
+        <!-- 抽奖开始 -->
+        <div class="activityTab">
+          <div class="form-item">
+            <label class="item-label">参与资格<span class="check-tips">【抽奖功能注意】①请先添加奖品，没有奖品无法抽奖>>请保存当前设置之后点我添加奖品 <<；②上墙人数要大于一次抽取人数</span> </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" name="cj_from" value="1">
+                当天互动</label>
+              <label class="radio">
+                <input type="radio" checked='checked' name="cj_from" value="0">
+                全部</label>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">是否显示池人数<span class="check-tips">此项用于设置抽满当前奖项所需人数，是否还能继续抽。【如现场临时加多奖品，或中奖者不在现场，推荐选择可以抽】</span> </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" name="cj_pond_display" value="1">
+                显示</label>
+              <label class="radio">
+                <input type="radio" checked='checked' name="cj_pond_display" value="0">
+                隐藏</label>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">抽满再抽<span class="check-tips">此项用于设置抽满当前奖项所需人数，是否还能继续抽。【如现场临时加多奖品，或中奖者不在现场，推荐选择可以抽】</span> </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" name="cj_stop" value="1">
+                可以抽</label>
+              <label class="radio">
+                <input type="radio" checked='checked' name="cj_stop" value="0">
+                不能抽</label>
+            </div>
+          </div>
+        </div>
+        <!-- 抽奖结束 --> 
+        <!-- 微评分开始 -->
+        <div class="activityTab">
+        <div class="form-item">
+            <label class="item-label">命令<span class="check-tips">如无特殊要求请保持默认，不区分大小写；多个命令请用使用冒号分号分隔，如：节目:JM;走秀:ZX</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="wpf_cmd" value="WPF">
+            </div>
+          </div>
+
+          <div class="form-item">
+            <label class="item-label">评分数量<span class="check-tips">填写每人可为几个节目评分，0表示可为全部节目评分</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="wpf_votes_num" value="0">
+            </div>
+          </div>
+
+          <div class="form-item">
+            <label class="item-label">评分节目<span class="check-tips">填写允许评分的节目ID（多个ID请使用逗号分隔），留空表示可为全部节目评分。举例：只允许给节目1、2、3评分，请输入：1,2,3（使用逗号分隔节目ID）</span> </label>
+            <div class="controls">
+              <input type="text" class="text input-large" name="wpf_votes_ids" value="">
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">计分模式<span class="check-tips">计票式与评分式最大的区别在于评分式支持1位小数。</span> </label>
+            <div class="controls">
+              <label class="radio">
+                <input type="radio" checked='checked' name="wpf_mode" value="1">
+                可以抽</label>
+              <label class="radio">
+                <input type="radio" name="wpf_mode" value="2">
+                不能抽</label>
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">权限分组<span class="check-tips"></span> </label>
+            <div class="controls">
+              <label class="textarea input-large600">
+                <textarea name="wpf_rule"></textarea>
+              </label>
+            </div>
+            <div class="check-tips">
+              请将人群最多的组设置为0；如无复杂要求留空。如只允许部分用户投票，请勿出现编号为0的分组<br />
+              分组:1,名称:评委,满分:10<br />
+              分组:2,名称:媒体,满分:5<br />
+              分组:0,名称:观众,满分:1<br />
+              上例规则的意义：评委最多可为一个节目投10票，媒体最多可投5票，观众最多可为一个节目投1票；用户属于什么组需要在"大屏幕管理"->"微评分分组"中设定
+            </div>
+          </div>
+          <div class="form-item">
+            <label class="item-label">评分节目<span class="check-tips"></span> </label>
+            <div class="controls">
+              <label class="textarea input-large600">
+                <textarea name="wpf_item"></textarea>
+              </label>
+            </div>
+          </div>
+        </div>
+        <!-- 微评分结束 --> 
+        <!-- 闭幕墙开始 -->
+        <div class="activityTab">
+          <div class="form-item">
+            <label class="item-label">闭幕墙<span class="check-tips"></span></label>
+            <div class="controls">
+              <textarea name="bimuqiang">{$field.bimuqiang|default="微久信大屏幕超级微信墙 闭幕墙 支持文字、图片、图文内容的展示。 这里可以放置感谢词宣布活动结束。如：感谢CCTV、感谢BTV。。。等一系列TV。 修改此处内容请登陆会员中心修改修改!"}</textarea>
+              {:hook('adminArticleEdit', array('name'=>'bimuqiang','value'=>''))} </div>
+          </div>
+        </div>
+        <!-- 闭幕墙结束 --> 
+        <div class="form-item">
+          <label class="item-label"></label>
+          <div class="controls">
+            <button type="submit" class="btn submit-btn ajax-post" target-form="form-horizontal">确 定</button>
+            <button class="btn btn-return" onClick="javascript:history.back(-1);return false;">返 回</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</block>
+<block name="style">
+  <style type="text/css">
+    .activityTab{display: none;}
+    .text{float: left;}
+    .uploadify{float: left; position: relative; top: 1px; margin-left: 10px;}
+  </style>
+</block>
+<block name="script">
+  <link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+  <php>if(C('COLOR_STYLE')=='blue_color') echo '
+    <link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">
+    ';</php>
+  <link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script> 
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script> 
+  <script type="text/javascript">
+      //
+      highlight_subnav('{:U('Qiang/add')}');
+  </script> 
+</block>

@@ -1,0 +1,48 @@
+<extend name="Base/common"/>
+<block name="body">
+<style type="text/css">
+body {
+  background: #0069c2;
+}
+</style>
+<div class="code_logo"> <img src="__IMG__/logo_big.png" width="146"> </div>
+<div class="code_top_bg"> <img src="__IMG__/code_top_bg.png" width="212"> </div>
+<form action="{:U('login')}" method="post">
+  <div class="codebox">
+    <input type="text" name="code" id="" class="textbox radius3">
+    <button type="submit" class="submit radius3">登录</button>
+    <p class="nocode">还没有邀请码，<a href="{:U('getcode')}" >快速获取</a></p>
+  </div>
+  <div class="checktip_code"></div>
+</form>
+</block>
+<block name="footer">
+  <div class="blank80"></div>
+  <div id="footer_blue" class="footer blue">
+    <ul class="menu">
+      <li><a href="{:U('Index/index')}"><img src="__IMG__/nav1blue<eq name="nav" value="nav1">hover</eq>.png"><i>主页</i></a> </li>
+      <li><a href="{:U('Article/detail',array('id'=>23))}"><img src="__IMG__/nav2blue<eq name="id" value="23">hover</eq>.png"><i>ICDSys</i></a> </li>
+      <li><a href="{:U('Article/detail',array('id'=>24))}"><img src="__IMG__/nav3blue<eq name="id" value="24">hover</eq>.png"><i>SMod</i></a> </li>
+      <li><a href="{:U('Article/detail',array('id'=>25))}"><img src="__IMG__/nav4blue<eq name="id" value="25">hover</eq>.png"><i>SSim</i></a> </li>
+      <li><a href="{:U('User/index')}"><img src="__IMG__/nav5blue<eq name="nav" value="nav5">hover</eq>.png"><i>设置</i></a> </li>
+    </ul>
+  </div>
+</block>
+<block name="script"> 
+  <script type="text/javascript">
+   $(function(){
+        $("form").submit(function(){
+        var self = $(this);
+        $.post(self.attr("action"), self.serialize(), success, "json");
+        return false;
+        function success(data){
+          if(data.status){
+            window.location.href = data.url;
+          } else {
+            self.find(".checktip_code").text(data.info);
+          }
+        }
+      });
+    });
+   </script> 
+</block>

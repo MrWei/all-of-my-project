@@ -1,0 +1,68 @@
+<extend name="Public/base"/>
+<block name="body">
+  <div class="main-title">
+    <h2>微信菜单</h2>
+  </div>
+  <!-- 表格列表 -->
+  <div class="tb-unit posr">
+    <div class="tb-unit-bar">
+      <a class="btn" href="{:U('addmenu')}">新 增</a>
+      <a href="{:U('createmenu')}"  class="confirm ajax-get btn">生成菜单</a>
+    </div>
+    <div class="category">
+      <div class="hd cf">
+        <div class="order"></div>
+        <div class="name">名称</div>
+      </div>
+      <dl class="cate-item">
+        <foreach name="listmenu" item="v0">
+          <dt class="cf">
+            <div class="btn-toolbar opt-btn cf">
+              <a title="编辑" href="{:U('editmenu',array('id'=>$v0['id']))}">编辑</a>
+              <eq name="v0.status" value="1">
+                <a title="禁用" href="{:U('Stateset',array('method'=>'weixin_menu','id'=>$v0['id'],'status'=>0))}" class="ajax-get">禁用</a>
+               <else /> 
+                <a title="启用" href="{:U('Stateset',array('method'=>'weixin_menu','id'=>$v0['id'],'status'=>1))}" class="ajax-get">启用</a>
+              </eq>  
+              <a title="删除" href="{:U('deletedo',array('method'=>'weixin_menu','id'=>$v0['id']))}" class="confirm ajax-get">删除</a>
+            </div>
+            <div class="order">
+              <input type="text" name="sort" class="text input-mini" value="{$v0['sort']}"></div>
+            <div class="name">
+              <span class="tab-sign"></span>
+              {$v0.name}
+              <a class="add-sub-cate" title="添加子分类" href="{:U('addmenu',array('id'=>$v0['id']))}"> <i class="icon-add"></i>
+              </a>
+              <span class="help-inline msg"></span>
+            </div>
+          </dt>
+          <foreach name="v0['_child']" item="v1">
+          <dd>
+            <dl class="cate-item">
+              <dt class="cf">
+                <div class="btn-toolbar opt-btn cf">
+                  <a title="编辑" href="{:U('editmenu',array('id'=>$v1['id']))}">编辑</a>
+                  <eq name="v1.status" value="1">
+                    <a title="禁用" href="{:U('Stateset',array('method'=>'weixin_menu','id'=>$v1['id'],'status'=>0))}" class="ajax-get">禁用</a>
+                   <else /> 
+                    <a title="启用" href="{:U('Stateset',array('method'=>'weixin_menu','id'=>$v1['id'],'status'=>1))}" class="ajax-get">启用</a>
+                  </eq> 
+                  <a title="删除" href="{:U('deletedo',array('method'=>'weixin_menu','id'=>$v1['id']))}" class="confirm ajax-get">删除</a>
+                </div>
+                <div class="order">
+                  <input type="text" name="sort" class="text input-mini" value="{$v1['sort']}"></div>
+                <div class="name">
+                  <span class="tab-sign"></span>
+                  {$v1.name}
+                  <span class="help-inline msg"></span>
+                </div>
+              </dt>
+            </dl>
+          </dd>
+        </foreach>
+        </foreach>
+      </dl>
+    </div>
+  </div>
+  <!-- /表格列表 -->
+</block>

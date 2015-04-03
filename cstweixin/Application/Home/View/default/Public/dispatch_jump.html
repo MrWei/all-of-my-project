@@ -1,0 +1,47 @@
+<extend name="Base/common"/>
+<block name="body">
+	<style type="text/css">
+body {
+  background: #0069c2;
+}
+a{color: #fff;}
+</style>
+	<div id="applyok">
+		<present name="message">
+			<h2>
+				<?php echo($message); ?></h2>
+			<div class="icon">
+				<div class="icon">
+					<img src="__IMG__/ok.png" width="65" alt=""></div>
+			</div>
+			<else/>
+			<h2>
+				<?php echo($error); ?></h2>
+			<div class="icon">
+				<img src="__IMG__/error.png" width="65" alt=""></div>
+		</present>
+		<div class="tips">
+			页面将在在 <b id="wait"><?php echo($waitSecond); ?></b>
+			后跳转,
+			<br />
+			如果没有跳转,
+			<a id="href" href="<?php echo($jumpUrl); ?>">请点此跳转</a>
+		</div>
+	</div>
+</block>
+<block name="footer">
+	<include file="Public/footer2"/>
+</block>
+<block name="script">
+	<script type="text/javascript">
+	(function(){
+		var wait = document.getElementById('wait'),href = document.getElementById('href').href;
+		var interval = setInterval(function(){
+			var time = --wait.innerHTML;
+			if(time <= 0) {
+				location.href = href;
+				clearInterval(interval);
+			};
+		}, 1000);
+		})();
+	</script></block>

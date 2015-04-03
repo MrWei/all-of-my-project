@@ -1,0 +1,139 @@
+<extend name="Base/common"/>
+<block name="body">
+  <form action="{:U('edit')}" method="post">
+    <input type="hidden" name="id" value="{$Think.cookie.user_id}">
+    <input type="hidden" name="realname" value="{$field.realname}">
+    <input type="hidden" name="openid" value="{$Think.cookie.openid}">
+    <input type="hidden" name="gid" value="{$Think.cookie.user_gid}">
+    <input type="hidden" name="code" value="{$field.code}">
+    <div id="setbox" class="wide radius5">
+      <div class="top blue">
+        <h2>{$field.realname}</h2>
+        <img src="__IMG__/logo_big.png" width="65"></div>
+      <div class="con">
+        <ul class="userinfo">
+          <li>
+            <img src="__IMG__/u1.png" width="16">
+            手机
+            <input type="text" class='textbox' name="mobile" value="{$field.mobile}"></li>
+          <li>
+            <img src="__IMG__/u2.png" width="16">
+            邮箱
+            <input type="text" class='textbox' name="email" value="{$field.email}"></li>
+          <li>
+            <img src="__IMG__/u3.png" width="16">
+            单位
+            <select name="companyid" id="company" onChange="changeCompany(this)"  class="xuanze bd1">
+              <option value="">请选择公司</option>
+              <foreach name="company" item="vo">
+                <option value="{$vo.id}" 
+                <if condition="$vo.id eq $field['companyid']">selected='selected'</if>
+                >{$vo.title}
+              </option>
+            </foreach>
+          </select>
+        </li>
+        <li>
+          <img src="__IMG__/u4.png" width="16">
+          部门
+          <select name="departmentid" id="department" class="xuanze bd1">
+            <notempty name="field.department">
+              <option value="{$field.departmentid}">{$field.department}</option>
+              <else />
+              <option value="">请选择部门</option>
+            </notempty>
+          </select>
+        </li>
+        <li>
+          <img src="__IMG__/u3.png" width="16">
+          输入单位
+          <input type="text" class='textbox' name="addcompany" placeholder="单位和部门请用空格分开!" value="" ></li>
+        <li>
+          <img src="__IMG__/u5.png" width="16">
+          工业电子ID
+          <input type="text" class='textbox' name="moblie" value="{$field.eid}"></li>
+        <li>
+          <img src="__IMG__/u5.png" width="16">
+          个性化标签
+          <input type="text" class='textbox' name="label" value="{$field.label}"></li>
+      </ul>
+      <div class="clear"></div>
+      <ul class="keylist margin10">
+        <foreach name="usertags" item="vo">
+          <li>{$vo.title}</li>
+        </foreach>
+      </ul>
+      <div class="order">
+        <input type="checkbox" name="order" 
+          <eq name="field.order" value="1">checked='checked'</eq>
+      value='1'>
+      <label for="">邮件订阅工业技术动态</label>
+    </div>
+    <div class="clear"></div>
+    <div class="checktip"></div>
+    <div class="clear"></div>
+    <div class="btnbox">
+      <input type="submit" value="更新" class="btn blue radius3">
+    </div>
+  </div>
+</div>
+</form>
+</block>
+<block name="footer">
+<include file="Public/footer"/>
+</block>
+<block name="script">
+<script type="text/javascript">
+   $("form").submit(function(){
+  var self = $(this);
+  $.post(self.attr("action"), self.serialize(), success, "json");
+  return false;
+  function success(data){
+    if(data.status){
+      self.find(".checktip").text(data.info);
+      setTimeout("location.href='"+data.url+"'",2000)
+
+    } else {
+      
+      self.find(".checktip").text(data.info);
+    }
+  }
+});
+
+  $(function(){
+    $('.userinfo li:last').css({'border':0});
+    //遍历循环关键字标签
+        $('.keylist li').each(function(index){
+           $(this).click(function(){
+              //先得到原始关键字的值 
+              oldkey = $("input[name='label']").val();
+              //原始关键字的值不为空时加上符号','
+              oldkey =  oldkey ? oldkey + ',' : oldkey; 
+              //判断符号','出现的次数，最多4个，即5个关键字
+              num=(oldkey.split(',')).length-1; 
+              if (num>4) {
+                $('.checktip').text('最多5个关键字');
+                return false;
+              };
+              key = oldkey + $(this).html()
+              _str =$("input[name='label']").val(key)
+           })
+        })
+     })
+      function changeCompany (obj) {
+      $('#department').html("<option value=''>请选择部门</option>");
+      var companyid = $(obj).val();
+      if( companyid ){
+         $.post( "{:U('changeCompany')}", { companyid:companyid } , function(data){
+         if( data ) {
+            $(data).each(function(i){
+                department = data[i];
+                html =  " <option value=" + department.id + ">" + department.title +"</option>" + "\n";
+                $('#department').append(html);
+            })
+         }
+        },'json' )
+      }
+    }
+  </script>
+</block>

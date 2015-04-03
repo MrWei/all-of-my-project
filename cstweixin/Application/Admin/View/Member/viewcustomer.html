@@ -1,0 +1,68 @@
+<extend name="Public/base" />
+<block name="body">
+  <!-- 标题栏 -->
+  <div class="main-title">
+    <h2>{$meta_title}</h2>
+  </div>
+  <!-- 数据列表 -->
+  <div class="data-table table-striped">
+    <table>
+      <thead>
+        <tr>
+          <th colspan="2">查看用户 {$field.realname} 的信息</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td width="150" style='text-align:right'>添加时间：</td>
+          <td>{$field.create_time|time_format}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>姓名：</td>
+          <td>{$field.realname}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>性别：</td>
+          <td>{$field.sex|sex_text}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>手机号：</td>
+          <td>{$field.mobile}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>Email：</td>
+          <td>{$field.email}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>公司名称：</td>
+          <td>{$field.company}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>部门：</td>
+          <td>{$field.department}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>职位：</td>
+          <td>{$field.job}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>标签：</td>
+          <td>  
+            <label class="textarea input-large">
+              <textarea name="label">{$field.cust_label}</textarea>
+            </label>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="blank20"></div>
+    <div class="form-item">
+            <button class="btn submit-btn" id="submit" type="submit" onclick="history.go(-1);" >返回</button>
+        </div>
+  </div>
+</block>
+<block name="script">
+  <script type="text/javascript">
+ highlight_subnav('{:U('Member/customer')}');  
+ </script>
+</block> 

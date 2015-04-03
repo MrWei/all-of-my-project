@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8"/>
+  <title>索为工业电子</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta content="telephone=no" name="format-detection" />
+  <link rel="stylesheet" href="css/style.css">
+  <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+  <script type="text/javascript" src="js/jquery.float.js"></script>
+  <script type="text/javascript" src="js/touch.js"></script>
+  <script type="text/javascript" src="js/common.js"></script>
+  <script type="text/javascript">
+    $(function(){
+      $(".footer").floatdiv({left:"0px",right:"0px",bottom:"0px",});
+    })
+  </script>
+  </head>
+  <body>
+ <div id="technology" class="wide radius5">
+   <div class="title blue">技术问题咨询</div>
+   <div class="con white zixun">
+    <h2>标题</h2>
+    <input type="text" name="" id="" class="textbox">
+    <h2>问题描述</h2>
+    <textarea name="" id="" class="text"></textarea>
+    <div class="item">
+      <h2>希望的反馈方式</h2>
+      <ul class="list">
+        <li><input type="radio" name="type" class=""><label for="">电话</label><input type="radio" name="type" class=""><label for="">电话</label></li>
+      </ul>
+    </div>
+    <div class="item">
+      <h2>希望的反馈时间</h2>
+      <ul class="list">
+        <li><input type="radio" class=""><label for="">非常紧急(1个工作日内)</label></li>
+        <li><input type="radio" class=""><label for="">越早越好(1~5个工作日内)</label></li>
+      </ul>
+    </div>
+    <h2>加快问题的处理速度，可以定义关键词</h2>
+    <!-- <div class="item" style="margin-top:10px;"><h2>关键词</h2><input type="text" name="" id="" class="keybox"></div> -->
+    <h2>关键词</h2>
+    <input type="text" name="" id="" class="textbox">
+    <div class=""><input type="button" class="btn blue" value="提交"></div>
+   </div>
+ </div>
+<div class="blank80"></div>
+<div id="footer" class="footer blue">
+    <ul class="menu">
+    <li><a href="1"><img src="images/nav1.png"><i>主页</i></a> </li>
+    <li><a href="2"><img src="images/nav2.png"><i>ICDSys</i></a> </li>
+    <li><a href="3"><img src="images/nav3.png"><i>SMod</i></a> </li>
+    <li><a href="4"><img src="images/nav4.png"><i>SSim</i></a> </li>
+    <li><a href="5"><img src="images/nav5.png"><i>设置</i></a> </li>
+  </ul>
+  </div>
+<script type="text/javascript">
+    TouchSlide({ slideCell:"#banner",titCell:".icon ul",mainCell:".slide ul", effect:"leftLoop", autoPlay:true,autoPage:true, });
+  </script>
+</body>
+</html>

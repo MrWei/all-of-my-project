@@ -1,0 +1,144 @@
+<extend name="Public/base" />
+<block name="body">
+  <div class="main-title">
+    <h2>{$meta_title}</h2>
+  </div>
+  <form action="{:U('updatecustomer')}" method="post" class="form-horizontal">
+    <input type="hidden" name="id" value="{:I('get.id')}">
+    <div class="form-item">
+      <label class="item-label"> 姓名 <span class="check-tips">（请输入客户的姓名）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="realname" value="{$field.realname}">
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label"> 性别 <span class="check-tips">（请选择客户的性别）</span> </label>
+      <div class="controls">
+        <label class="radio">
+          <input type="radio" value="1" name="sex" <eq name="field.sex" value='1'>checked</eq>>
+          先生</label>
+        <label class="radio">
+          <input type="radio" value="0" name="sex" <eq name="field.sex" value='0'>checked</eq>>
+          女士</label>
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label"> 手机号 <span class="check-tips">（请输入客户的手机号）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="mobile" value="{$field.mobile}">
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label"> email <span class="check-tips">（请输入客户的email）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="email" value="{$field.email}">
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label"> 公司 <span class="check-tips">（请选择用户的公司）</span> </label>
+      <div class="controls">
+        <select name="companyid" id="company" onchange="changeCompany(this)" >
+          <option value="">请选择公司</option>
+          <foreach name="company" item="vo">
+            <option value="{$vo.id}" <if condition="$vo.id eq $field['companyid']">selected='selected'</if>>{$vo.title}</option>
+          </foreach>
+        </select>
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label">快速添加公司<span class="check-tips">（请输入客户公司）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="add_company" value="">
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label"> 部门 <span class="check-tips">（请选择用户的部门）</span> </label>
+      <div class="controls">
+        <select name="departmentid" id="department">
+          <notempty name="field.department">
+          <option value="{$field.departmentid}">{$field.department}</option>
+          <else />  
+          <option value="">请选择部门</option>
+          </notempty>
+        </select>
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label">快速添加部门<span class="check-tips">（请输入客户部门）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="add_department" value="">
+      </div>
+    </div>
+        <div class="form-item">
+      <label class="item-label"> 职位 <span class="check-tips">（请输入客户的职位）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="job" value="{$field.job}">
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label"> 备注 <span class="check-tips">（客户的信息）</span> </label>
+      <div class="controls">
+        <label class="textarea input-large">
+          <textarea name="content">{$field.content}</textarea>
+        </label>
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label">客户标签<span class="check-tips">（请输入或选择客户的标签,用','分开）</span> </label>
+      <div class="controls">
+        <label class="textarea input-large">
+          <textarea name="label">{$field.cust_label}</textarea>
+        </label>
+        <div class="clear blank10"></div>
+        <ul class="keylist">
+            <foreach name="customerlabel" item="vo">
+            <li>{$vo.title}</li>
+            </foreach>
+        </ul>
+      </div>
+    </div>
+    <div class="checktip" style="color:red"></div>
+    <div class="clear blank10"></div>
+    <div class="form-item">
+      <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+      <button class="btn btn-return" onClick="javascript:history.back(-1);return false;">返 回</button>
+    </div>
+  </form>
+</block>
+<block name="script"> 
+  <script type="text/javascript">
+    $(function(){
+        $('.keylist li').each(function(index){
+           $(this).click(function(){
+              oldkey = $("textarea[name='label']").val();
+              oldkey =  oldkey ? oldkey + ',' : oldkey; 
+              num=(oldkey.split(',')).length-1; 
+              if (num>9) {
+                $('.checktip').text('最多10个标签');
+                return false;
+              };
+              key = oldkey + $(this).html()
+              _str =$("textarea[name='label']").val(key)
+           })
+        })
+    })
+
+  highlight_subnav('{:U('Member/customer')}'); 
+
+  function changeCompany (obj) {
+      $('#department').html("<option value=''>请选择部门</option>");
+      var companyid = $(obj).val();
+      if( companyid ){
+         $.post( "{:U('changeCompany')}", { companyid:companyid } , function(data){
+         if( data ) {
+            $(data).each(function(i){
+                department = data[i];
+                html =  " <option value=" + department.id + ">" + department.title +"</option>" + "\n";
+                $('#department').append(html);
+            })
+         }
+        },'json' )
+      }
+    } 
+  </script> 
+</block>

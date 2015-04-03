@@ -1,0 +1,74 @@
+<extend name="Base/common"/>
+<block name="body">
+      <div id="technology" class="wide radius5">
+   <div class="title blue">{$data.classname}</div>
+   <div class="con white">
+    <!-- 搜索开始  -->
+    <div class="searcharea">
+      <ul class="list">
+        <li>
+          <img src="__IMG__/time.png" width="13">按时间
+          <select name="time" id="" class="xuanze bd1">
+            <option value="0">全部</option>
+           <foreach name="data.time_search" item="vo">
+              <option value="{$key}" <eq name="key" value="$time">selected='selected'</eq> >{$vo}</option>
+            </foreach>
+          </select>
+        </li>
+        <li>
+          <img src="__IMG__/cp.png" width="13">按产品
+          <select name="cateid" id="" class="xuanze bd1">
+            <option value="0">全部</option>
+            <foreach name="data.product_class" item="vo">
+              <option value="{$vo.id}" <eq name="vo.id" value="$cateid">selected='selected'</eq> >{$vo.title}</option>
+            </foreach>
+          </select>
+        </li>
+      </ul>
+      <input type="button" url="{:U('Article/resource')}" value="查找" class="tech_btn blue">
+    </div>
+    <!--  -->
+    <div class="ziliao">
+      <table class="tab">
+         <tr>
+          <th width="35">编号</th>
+          <th width="">名称</th>
+          <th width="35">版本</th>
+          <th width="70">操作</th>
+        </tr>
+        <tbody>
+        <notempty name="info">
+           <foreach name="info" item="vo">  
+        <tr>
+          <td style="text-align:center">{$vo.id}</td>
+          <td>{$vo.title}</td>
+          <td style="text-align:center">{$vo.vision}</td>
+          <td style="text-align:center"><a href="{:U('Article/detail',array('id'=>$vo['id']))}">查看</a> <a href="{:U('File/download',array('id'=>$vo['id']))}">下载</a></td>
+        </tr>
+        </foreach>
+        <else/>
+        <tr>
+          <td colspan="4"  style="text-align:center">{:C('EMPTY_DATA')}</td>
+        </tr>
+        </notempty>
+        </tbody>
+      </table>
+    </div>
+    <div id="page">{$_page}</div>
+   </div>
+ </div> 
+</block>
+<block name="footer">
+<include file="Public/footer"/>
+</block>
+<block name="script">
+ <script type="text/javascript">
+  $("input[type='button']").click(function(){
+    var url     =   $(this).attr('url');
+    var time    =   $("select[name='time']").val();
+    var cateid  =   $("select[name='cateid']").val();
+    url += "&time=" + time + "&cateid=" + cateid;  
+    window.location.href = url;
+  });
+ </script>
+</block>

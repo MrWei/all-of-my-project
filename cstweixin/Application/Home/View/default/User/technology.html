@@ -1,0 +1,101 @@
+<extend name="Base/common"/>
+<block name="body">
+  <form action="" method="post">
+    <input type="hidden" name="uid" value="{$Think.cookie.user_id}">
+    <div id="technology" class="wide radius5">
+      <div class="title blue">技术问题咨询</div>
+      <div class="con white zixun">
+        <h2>标题</h2>
+        <input type="text" name="title" id="" class="textbox">
+        <h2>问题描述</h2>
+        <textarea name="p_description" id="" class="text"></textarea>
+        <div class="item">
+          <h2>希望的反馈方式</h2>
+          <ul class="list">
+            <li id="type">
+              <foreach name="feedback_type" item="vo">
+                <input type="radio" name="type" value="{$key}">
+                <label for="">{$vo}</label>
+              </foreach>
+            </li>
+          </ul>
+        </div>
+        <div class="item">
+          <h2>希望的反馈时间</h2>
+          <ul class="list" id="time">
+            <foreach name="feedback_time" item="vo">
+              <li>
+                <input type="radio" name="time" value="{$key}">
+                <label for="">{$vo}</label>
+              </li>
+            </foreach>
+          </ul>
+        </div>
+        <h2>加快问题的处理速度，可以定义关键词</h2>
+        <h2>关键词<span>(多个关键词请以','隔开)</span></h2>
+        <input type="text" name="keywords" value="" class="textbox">
+        <ul class="keylist">
+            <foreach name="techkey" item="vo">
+            <li>{$vo.title}</li>
+            </foreach>
+        </ul>
+        <div class="checktip"></div>
+        <div class="btnbox">
+          <button type="submit" class="btn blue radius3">提交</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</block>
+<block name="footer">
+  <div class="blank10"></div>
+<div id="footer" class="footer blue">
+    <ul class="menu">
+    <li><a href="{:U('Index/index')}"><img src="__IMG__/nav1<eq name="nav" value="nav1">hover</eq>.png"><i>主页</i></a> </li>
+    <li><a href="{:U('Article/detail',array('id'=>23))}"><img src="__IMG__/nav2<eq name="id" value="23">hover</eq>.png"><i>ICDSys</i></a> </li>
+    <li><a href="{:U('Article/detail',array('id'=>24))}"><img src="__IMG__/nav3<eq name="id" value="24">hover</eq>.png"><i>SMod</i></a> </li>
+    <li><a href="{:U('Article/detail',array('id'=>25))}"><img src="__IMG__/nav4<eq name="id" value="25">hover</eq>.png"><i>SSim</i></a> </li>
+    <li><a href="{:U('User/index')}"><img src="__IMG__/nav5<eq name="nav" value="nav5">hover</eq>.png"><i>设置</i></a> </li>
+  </ul>
+  </div>
+<include file="Public/var"/>
+{:hook('pageFooter', 'widget')}
+</block>
+<block name="script"> 
+  <script type="text/javascript">
+     $(function(){
+        $('#type input:first').attr('checked','checked');
+        $('#time li:first').find('input').attr('checked','checked');
+        //遍历循环关键字标签
+        $('.keylist li').each(function(index){
+           $(this).click(function(){
+              //先得到原始关键字的值 
+              oldkey = $("input[name='keywords']").val();
+              //原始关键字的值不为空时加上符号','
+              oldkey =  oldkey ? oldkey + ',' : oldkey; 
+              //判断符号','出现的次数，最多4个，即5个关键字
+              num=(oldkey.split(',')).length-1; 
+              if (num>4) {
+                $('.checktip').text('最多5个关键字');
+                return false;
+              };
+              key = oldkey + $(this).html()
+              _str =$("input[name='keywords']").val(key)
+           })
+        })
+     })
+     $("form").submit(function(){
+      var self = $(this);
+      $.post(self.attr("action"), self.serialize(), success, "json");
+      return false;
+
+      function success(data){
+        if(data.status){
+          window.location.href = data.url;
+        } else {
+          self.find(".checktip").text(data.info);
+        }
+      }
+    });
+ </script> 
+</block>

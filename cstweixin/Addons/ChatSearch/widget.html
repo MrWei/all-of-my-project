@@ -1,0 +1,40 @@
+<div class="span{$addons_config.width}">
+  <div class="columns-mod">
+    <div class="hd cf">
+      <h5>{$addons_config.title}</h5>
+      <div class="title-opt"></div>
+    </div>
+    <div class="bd">
+      <form action="{:U('Weixin/chatsearch')}" method="post">
+      <div class="searchbox">
+        <table>
+           <tr>
+            <th>用户</th>
+            <td>
+              <select name="openid" class="input-4x">
+                <option value="">请选择用户</option>
+                <foreach name="users" item="vo">
+                <option value="{$vo.openid}">{$vo.realname}</option>
+              </foreach>
+              </select>
+            </td>
+          </tr>
+           <tr>
+            <th>时间</th>
+            <td>
+              <input type="text" id="time-start" name="startTime" class="text input-4x" value="" placeholder="起始时间" />-<input type="text" id="time-end" name="endTime" class="text input-4x" value="" placeholder="结束时间" />
+            </td>
+          </tr>
+          <tr>
+            <th>关键词</th>
+            <td>
+              <input type="text" value="" name="keywords" class="text input-6x">
+            </td>
+          </tr>
+        </table>
+        <div class="inputSubmit"><input type="submit" value="搜索" class="btn" /></div>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

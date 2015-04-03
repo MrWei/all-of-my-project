@@ -1,0 +1,14 @@
+<extend name="Public/screen"/>
+<block name="body">
+	<div class="information">
+		{$field.bimuqiang}
+	</div>	
+</block>
+<block name="script">
+	<script type="text/javascript">
+		$(function(){
+			admissionAnimation('.information');
+		})
+		window.onbeforeunload=closeAnimation;
+	</script>	
+</block>

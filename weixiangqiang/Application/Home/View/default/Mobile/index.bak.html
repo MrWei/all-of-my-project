@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Cache-control" content="no-cache" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<meta name="format-detection" content="telephone=no" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<title>{$field.title}</title>
+<link rel="stylesheet" href="__STATIC__/phone/style.css" type="text/css" media="all">
+<link rel="stylesheet" href="__STATIC__/phone/xiaomistyle.css" type="text/css" media="all">
+<script type="text/javascript" src="__STATIC__/phone/jquery-1.8.3.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="__STATIC__/phone/xiaomibbs.js" charset="utf-8"></script>
+<script language="javascript">
+$(function(){
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        // 隐藏微信中网页右上角按钮
+        WeixinJSBridge.call('hideOptionMenu');
+        // 隐藏微信中网页底部导航栏
+        WeixinJSBridge.call('hideToolbar');
+    });
+});
+</script>
+<style type="text/css">
+.list {}
+.list th, .list td {padding: 10px 6px 6px;border-bottom: 1px #dbdbdb solid;}
+.list th {width: 48px;height: 62px;overflow: hidden;margin-top: 12px;border-radius: 2px;font-size: 12px;line-height: 14px;text-align: center;vertical-align: top;}
+.list th b {font-weight: normal;}
+.list th.bigname b {width: 48px;height: 48px;display: table-cell;text-align: center;vertical-align: middle;font-size: 14px;border-radius: 2px;background: #f2f2f2;border: 1px #dbdbdb solid;}
+.list th img {width: 48px;height: 48px;}
+.list td {padding-left: 0;padding-right: 0;vertical-align: top;font-size: 16px;line-height: 22px;}
+.list td .img {display: block;width: 100%;height: auto;}
+.list td .brow {width: 22px;height: 22px;}
+   /*表情*/.list td .main { /*min-height:44px;*/margin: 0;padding: 0;margin-top: 8px;word-break: break-all;}
+.list td .main .msgtype {display: inline;width: auto;height: auto;vertical-align: middle;}
+.list td p {text-align: left;margin: 0;padding: 0;margin-top: 8px;font-size: 13px;line-height: 20px;height: 20px;color: #666666;}
+.list td p a {color: #666666;padding: 0;margin: 0;line-height: 20px;height: 20px;overflow: hidden;}
+.list td p #btn_praise { /*background:url(__STATIC__/phone/images/inter_praise.png) left center no-repeat; padding-left:17px;*/}
+.list td p #btn_comment { /*background:url(__STATIC__/phone/images/inter_reply.png) left center no-repeat; padding-left:22px;*/}
+.list td .inter {margin-top: 10px;font-size: 13px;overflow: hidden;background: #f2f2f2;color: #666666;}
+.list td .inter #praise {padding: 3px 5px 0;}
+.list td .inter #praise img {vertical-align: middle;margin-top: -3px;margin-right: -3px;}
+.list td .inter #praise span {margin-left: 6px;padding: 0; line-height: 18px;}
+.list td .inter #reply {padding: 0 5px 5px;overflow: hidden;}
+.list td .inter #reply li {margin: 0;padding: 0;width: auto;border: none;margin-top: 5px;font-size: 14px;line-height: 18px;position: static;min-height: 18px;}
+.list .mt0 {margin-top: 0;}
+.page strong {font-weight: normal;}
+#getold th, #getold td, #getnew th, #getnew td {background: #eeeeee;height: auto;line-height: 22px;padding: 15px 0;}
+#replyBar {position: fixed;width: 100%;z-index: 999;background: #dddddd;left: 0;bottom: 0;border-top: 1px #eeeeee solid;}
+#replyBar div {margin: 8px 5px 2px;}
+#replyBar td {text-align: center;}
+#replyBar th {padding: 0 10px 0 5px;background: #dddddd;}
+#replyBar .type {}
+#replyBar .type b {display: block;text-align: center;font-weight: normal;border: 1px #888888 solid;line-height: 38px;border-radius: 2px;color: #ffffff;background: #555555;cursor: default;}
+#replyBar .content {}
+#replyBar .content textarea {width: 100%;margin: 0;height: auto;min-height: 34px;overflow-y: visible;line-height: 18px;border-color: #bbbbbb;border-radius: 2px;padding: 2px;}
+#replyBar .send {}
+#replyBar .send a {display: block;height: 40px;line-height: 40px;color: #ffffff;background: #060;border-color: #050;border-radius: 2px;cursor: default;}
+#replyBar .send .load {background: url(__STATIC__/phone/images/loading.gif) 20px 8px no-repeat;}
+#showImg {z-index: 8888;position: absolute;top: 0;left: 0;background: #000;filter:alpha(opacity:70);border-radius: 2px;}
+#showImg .close {position: absolute;top: 2%;right: 2%;}
+#showImg .img {width: 100%;height: auto;}
+</style>
+</head>
+
+<body class="bg">
+<aside class="menu" style=" z-index:99999;">
+  <header>
+    <div class="img"><img src="{$userinfo.avatar}"></div>
+    <dl class="notLogin">
+      <dt><a>{$userinfo.nickname}</a></dt>
+    </dl>
+  </header>
+  <div class="menu-container">
+    <ul>
+      <li><a href="#"><i class="icon icon-home"></i>首页</a></li>
+      <li class="current"><a href="#"><i class="icon icon-dpm"></i>大屏幕</a></li>
+      <li><a href="#"><i class="icon icon-twq"></i>提问墙</a></li>
+      <li><a href="#"><i class="icon icon-twq"></i>许愿墙</a></li>
+      <li><a href="#"><i class="icon icon-twq"></i>答题板</a></li>
+    </ul>
+  </div>
+</aside>
+<div id="title" class="wrap" style="position:fixed; left:0; top:0; z-index:9999;"> 
+  <!-- header start -->
+  <header class="header">
+    <div class="nav">
+      <div class="header-tit"> <span class="name">大屏幕</span> </div>
+      <div class="header-nav"> <a class="header-btn" id="menu-btn" href="#"><i class="icon icon-menu"></i></a> </div>
+    </div>
+  </header>
+</div>
+<div id="mode" class="wrap" style="position:fixed; z-index:999; left:0; top:44px; display:none" >
+  <div class="topbar">
+    <ul class="tabs">
+      <li><a href="#">文字模式</a></li>
+      <li><a href="#" class="current">头像模式</a></li>
+      <li><a href="#">图片模式</a></li>
+    </ul>
+  </div>
+</div>
+<div class="wrap" style="">
+  <div class="threadlist" id="threadlist" style="overflow:auto;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="list">
+      <tr id="getold">
+        <td align="center" valign="middle">点击获取更早的信息</td>
+      </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="list" id="list">
+      <tbody>
+        <volist name="chatList" id="vo">
+            <if condition="$uid eq $vo['uid']">
+            <tr id="{$vo.id}">
+            <th >&nbsp;</th>
+            <td align="right"><div class="main" > {$vo.id}楼 {$vo.keywords} </div>
+              <p style="text-align:right;"> <a href="javascript:void(0);" id="btn_praise">赞一个(<span id="count_praise">1</span>)</a>&nbsp;&nbsp;<a href="javascript:void(0);" id="btn_comment">评论</a>&nbsp;&nbsp;                [{$vo.create_time|date="H:i",###}] </p>
+               <div class="inter">
+                <div id="praise" class="none"></div>
+                <ul id="reply" class="none">
+                </ul>
+              </div></td>
+            <th ><img src="{$vo.avatar}"><br />
+              <b>{$vo.nickname}</b></th>
+          </tr>
+          <else />
+          <tr id="{$vo.id}">
+            <th ><img src="{$vo.avatar}"><br />
+              <b>{$vo.nickname}</b></th>
+            <td ><div class="main" > {$vo.id}楼 {$vo.keywords} </div>
+              <p > [{$vo.create_time|date="H:i",###}]                &nbsp;&nbsp;<a href="javascript:void(0);" id="btn_praise">赞一个</a>&nbsp;&nbsp;<a href="javascript:void(0);" id="btn_comment">评论</a> </p>
+              <div class="inter">
+                <div id="praise" class="none"></div>
+                <ul id="reply" class="none">
+                </ul>
+              </div></td>
+            <th >&nbsp;</th>
+          </tr>
+          </if>
+        </volist>
+      </tbody>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="list">
+      <tr id="getnew">
+        <td align="center" valign="middle">点击获取最新信息</td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div id="replyBar" style="display:none">
+  <div>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="">
+      <tr>
+        <td class="type" width="50" style="vertical-align:top;"><b id="type" onclick="type();">刷新</b></td>
+        <th class="content" style="padding-bottom:0;"> <textarea id="textarea" class='editable' onkeydown ="if(event.keyCode==13) return false; " oninput="this.style.height='0px';this.style.height=(this.scrollHeight+'px');" onpropertychange="this.style.height=(this.scrollHeight+'px')" /></textarea>
+        </th>
+        <td class="send" width="64" style="vertical-align:top;"><a id="send">提交</a></td>
+      </tr>
+    </table>
+  </div>
+</div>
+{$page}
+<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0" id="showImg" class="none">
+  <tr>
+    <td align="center" valign="middle"></td>
+  </tr>
+</table>
+<script language="javascript">
+var show_time = 1;
+var timeFormat = '';
+if(show_time==1) timeFormat = 'hm'; else if(show_time==2) timeFormat = 'md'; else if(show_time==3) timeFormat = 'mdhm'; else timeFormat = 'mdhm';
+var t = 'wxq';
+var tlElem = document.getElementById("threadlist"); //绑定滚动层
+var tlScrollHeight = 0;
+var hideTime = 0;   //header隐藏时间
+var page = 1;
+var oriScrollTop = 0;
+var sendPost = 0;
+var minAudit = 1426759270421;
+var maxAudit = 1427710059285;
+var replyID = 0;    // 评论ID
+var replyName = ''; // 评论呢称
+
+var idGetOld = document.getElementById("getold");   //绑定滚动层
+var idGetNew = document.getElementById("getnew");   //绑定滚动层
+
+function formatDateTime(now, format){
+    var d = new Date(parseInt(now));
+    var year = d.getYear();
+    var month = d.getMonth()+1;
+    var date = d.getDate();
+    var hour = d.getHours();
+    var minute = d.getMinutes();
+    var second = d.getSeconds();
+    if(month<10) month = '0'+month;
+    if(date<10) date = '0'+date;
+    if(hour<10) hour = '0'+hour;
+    if(minute<10) minute = '0'+minute;
+    if(second<10) second = '0'+second;
+    
+    if(format=='mdhm') return month+'.'+date+' '+hour+":"+minute;
+    else if(format=='md') return month+'.'+date;
+    else if(format=='hms') return hour+':'+minute+':'+second;
+    else if(format=='hm') return hour+':'+minute;
+}
+
+var getJSONStatus = 0;
+
+function showHeader(){
+    $("#title").removeClass("none");
+    $("#mode").removeClass("none");
+    hideTime = Date.parse(new Date()) + 3000;
+    //$("#type").text('显示');
+}
+
+function hideHeader(){
+    var nt = Date.parse(new Date());
+    if(nt>hideTime){
+        $("#title").addClass("none");
+        $("#mode").addClass("none");
+        //$("#type").text('隐藏');
+    }
+}
+
+var idTitleHeight = document.getElementById("title").clientHeight;// $("#reply").height();
+var idModeHeight = document.getElementById("mode").clientHeight;// $("#reply").height();
+var idGetOldHeight = document.getElementById("getold").clientHeight;// $("#reply").height();
+var idGetNowHeight = document.getElementById("getnew").clientHeight;// $("#reply").height();
+
+function init(){
+    idTitleHeight = document.getElementById("title").clientHeight;
+    idModeHeight = document.getElementById("mode").clientHeight;
+    idGetOldHeight = document.getElementById("getold").clientHeight;
+    idGetNowHeight = document.getElementById("getnew").clientHeight;
+
+    var bodyHeight = document.body.clientHeight;
+    var replyBarHeight = document.getElementById("replyBar").clientHeight;
+    var tlHeight = bodyHeight - replyBarHeight;
+    $("#threadlist").css("height", tlHeight+"px");
+    
+    showHeader();
+    setInterval(hideHeader, 2000);
+    
+    tlElem.scrollTop = bodyHeight*10;
+    tlElem.scrollTop = tlElem.scrollTop-idGetNowHeight;
+    tlScrollHeight = tlElem.scrollHeight;
+    
+    oriScrollTop = tlElem.scrollTop;
+    
+    // 隐藏更新提示
+    //setTimeout('tlElem.scrollTop = tlElem.scrollTop-idGetNowHeight;', 3000);
+}
+
+window.onload = function(){
+    setTimeout(init, 500);
+};
+
+function getIng(id){
+    $("#"+id+" td").html('正在获取 <img src="__STATIC__/phone/images/loading.gif" style="vertical-align:middle;" />');
+    //$("#list").prepend('<tr id="loading"><th>&nbsp;</th><td align="center" valign="middle" style="line-height:58px;">正在获取 <img src="__STATIC__/phone/images/loading.gif" style="vertical-align:middle;" /></td><th>&nbsp;</th></tr>');
+}
+
+function getOver(){
+    var id = arguments[0] ? arguments[0] : '';
+    var text = arguments[1] ? arguments[1] : '获取完成！';
+    var time = arguments[2] ? arguments[2] : 2000;
+    
+    //alert(id+','+text+','+time);
+    $("#"+id+" td").html(text);
+    if(id=='getold'){
+        //setTimeout('tlElem.scrollTop=tlElem.scrollTop+idGetOldHeight; $("#'+id+' td").text("点击获取更早的信息");', 2000);
+        setTimeout('$("#'+id+' td").text("点击获取更早的信息");', time);
+    }else if(id=='getnew'){
+        //alert(id+','+text+','+time);
+        setTimeout('tlElem.scrollTop=tlElem.scrollTop-idGetOldHeight; $("#'+id+' td").text("点击获取最新信息");', time);
+    }
+}
+function getText(id){
+    $("#"+id+" td").html('向下滑动获取更早数据！');
+    //$("#list").prepend('<tr id="loadover"><th>&nbsp;</th><td align="center" valign="middle" style="line-height:58px;">您已登顶 └(^o^)┘</td><th>&nbsp;</th></tr>');
+}
+
+function getJSON(id){
+    if(getJSONStatus) return false;
+    getJSONStatus = 1;
+    page++;
+    $("#loadover").remove();
+    getIng(id);
+    var to = 0;
+    var basicAudit = 0;
+    if(id=='getold'){
+        to = -1;
+        basicAudit = minAudit;
+    }else if(id=='getnew'){
+        to = 1;
+        basicAudit = maxAudit;
+    }
+    //alert('1 to='+to+',basicAudit='+basicAudit);
+    $.getJSON( "{:U('home/Mobile/ajaxData')}" , { uid:"{$uid}", eid:"{$eid}", page:page, basicAudit:basicAudit, to:to}, 
+        function(data, status){
+            $("#loading").remove();
+            var jsonLength = 0;
+            var allHtml = '';
+            // if(data){
+            //     $.each(data, function(k, v){
+            //          console.log(k, v);
+            //         var time13 = 0;
+            //         var timestr = '';
+                    
+            //         //alert("k="+k+",v="+v+',v.caudit='+v.caudit+',minAudit='+minAudit+',maxAudit='+maxAudit);
+            //         var nowid = 0;
+            //         minAudit = minAudit<v.caudit ? minAudit : v.caudit;
+            //         maxAudit = maxAudit>v.caudit ? maxAudit : v.caudit;
+            //         nowid = v.cid;
+            //         var trid = 'tr'+nowid;
+                    
+            //         // 排重
+            //         //if($("#tr"+trid).size()>0) return true;
+            //         $("#tr"+trid).remove();
+                    
+            //         var html = '<tr id="'+trid+'">';
+                    
+            //         if(!1) html += '<th class="bigname">'; else html += '<th>';
+            //         if(v.uid!=parseInt("{$uid}")){
+            //             if(v.avatar){
+            //                 html += '<img src='+v.avatar+'><br />';
+            //             }
+            //             html += '<b>'+v.nickname+'</b>';
+            //         }else{
+            //             html += '&nbsp;';
+            //         }
+            //         html += '</th>';
+                    
+            //         if(v.uid=="{$uid}") html += '<td align="right">'; else html += '<td>';
+            //         if(v.picture && 1==2) html += '<img src="'+v.picture+'" class="img" onclick="showImg(\''+v.picture+'\');" />';
+            //         if(v.content){
+            //             if(v.cmedia) html += '<img src="__STATIC__/phone/images/msg_type_voice.png" class="msgtype" /> '; else if(v.content.indexOf('我在:')==0) html += '<img src="__STATIC__/phone/images/msg_type_location.png" class="msgtype" /> ';
+            //             html += '<div class="main" ';
+            //             if(v.picture) html += 'style="min-height:22px;';
+            //             html += '>'+v.floor+'楼 '+v.content+'</div>';
+            //         }
+            //         html += '<p ';
+            //         if(v.uid==31790423) html += ' style="text-align:right;"';
+            //         html += '>';
+            //         // 遍历赞
+            //         var phtml = '';
+            //         var praiseArr = new Array();
+            //         praiseArr = v.praise.split("[;]");
+            //         var praiseCount = 0;
+            //         $.each(praiseArr, function(rk, rv){
+            //             if(rv){
+            //                 var r_v = new Array();
+            //                 r_v = rv.split("[,]");
+            //                 phtml += '<span id="'+r_v[0]+'">'+r_v[1]+'</span>';
+            //                 praiseCount++;
+            //             }
+            //         });
+            //         var pcn = 'none';
+            //         if(phtml){ pcn = ''; phtml = '<img src="__STATIC__/phone/images/inter_praise_blue.png" />'+phtml;}
+            //         // 遍历回复
+            //         var rhtml = '';
+            //         var replyCount = 0;
+            //         if(v.replyArr){
+            //             $.each(v.replyArr, function(rk, rv){
+            //                 time13 = rv.caudit;
+            //                 rhtml += '<li>'+rv.nickname+'：'+rv.content+' ['+formatDateTime(time13,timeFormat)+']</li>';
+            //                 replyCount++;
+            //             });
+            //         }
+            //         var rcn = 'none';
+            //         if(rhtml) rcn = '';
+                    
+            //         var showpraise = 1;
+            //         var praises = '[;]'+v.praise+'[;]';
+            //         if(praises.indexOf('[;]31790423[,]123[;]')>=0) showpraise = 0;
+            //         var poc = '';
+            //         if(showpraise) poc = 'onclick="praise('+nowid+');"';
+            //         if(v.uid==31790423){
+            //             html += '<a href="javascript:void(0);" '+poc+' id="btn_praise">赞一个';
+            //             if(praiseCount) html += '(<span id="count_praise">'+praiseCount+'</span>)';
+            //             html += '</a>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="reply('+nowid+',\''+v.nickname+'\');" id="btn_comment">评论';
+            //             if(replyCount) html += '(<span id="count_comment">'+replyCount+'</span>)';
+            //             html += '</a>&nbsp;&nbsp;';
+            //         }
+            //         time13 = v.caudit;
+            //         if(show_time) timestr = '['+formatDateTime(time13,timeFormat)+']';  // 判断是否需要显示时间
+            //         html += timestr;
+            //         if(v.uid!=31790423){
+            //             html += '&nbsp;&nbsp;<a href="javascript:void(0);" '+poc+' id="btn_praise">赞一个';
+            //             if(praiseCount) html += '(<span id="count_praise">'+praiseCount+'</span>)';
+            //             html += '</a>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="reply('+nowid+',\''+v.nickname+'\');" id="btn_comment">评论';
+            //             if(replyCount) html += '(<span id="count_comment">'+replyCount+'</span>)';
+            //             html += '</a>';
+            //         }
+            //         html += '</p>';
+                    
+            //         html += '<div class="inter"><div id="praise" class="'+pcn+'">'+phtml+'</div><ul id="reply" class="'+rcn+'">'+rhtml+'</ul></div>';
+                    
+            //         html += '</td>';
+                    
+            //         if(!1) html += '<th class="bigname">'; else html += '<th>';
+            //         if(v.uid==31790423){
+            //             if(v.avatar){
+            //                 html += '<img src='+v.avatar+'><br />';
+            //             }
+            //             html += '<b>'+v.nickname+'</b>';
+            //         }else{
+            //             html += '&nbsp;';
+            //         }
+            //         html += '</th>';
+                    
+            //         html += '</tr>';
+                    
+            //         allHtml = allHtml + html;
+                    
+            //         jsonLength++;
+            //     });
+            //     //alert('2 to='+to+',basicAudit='+basicAudit+',minAudit'+minAudit+',maxAudit='+maxAudit);
+            // }
+            if(id=='getold'){
+                $("#list").prepend(allHtml);
+                tlElem.scrollTop = tlElem.scrollHeight-tlScrollHeight-(idModeHeight+idModeHeight)*3;
+            }else if(id=='getnew'){
+                $("#list").append(allHtml);
+                //tlElem.scrollTop = tlElem.scrollHeight+tlScrollHeight-(idModeHeight+idModeHeight)*2;
+            }
+            //alert(jsonLength);
+            getJSONStatus = 0;
+            if(jsonLength) getOver(id); else{ if(id=='getold') getOver(id,'<font color="green">您已登顶 └(^o^)┘</b>'); else if(id=='getnew') getOver(id,'<font color="green">暂无信息 ^O^</font>');}
+            
+            tlScrollHeight = tlElem.scrollHeight;
+            
+    });
+}
+
+function addSendText(text){
+    sendPost = 1;
+    $("#send").html('');
+    $("#send").addClass("load");
+    
+    if(!text) text = '正在提交，请稍等...';
+    $("#getnew td").html(text);
+    
+    /*var s = document.getElementById("sendtext");
+    if(s){
+        $("#getnew td").html(text);
+    }else{
+        $('#list').append('<tr id="sendtext"><th>&nbsp;</th><td align="center" valign="middle" style="line-height:58px;">'+text+'</td><th>&nbsp;</th></tr>');
+    }*/
+}
+function delSendText(t){
+    if(t) tlElem.scrollTop = tlElem.scrollTop*10;
+    function dst(){
+        $("#send").removeClass("load");
+        $("#send").text('提交');
+        //$("#sendtext").remove();
+        sendPost = 0;
+        getOver('getnew');
+    }
+    setTimeout(dst, 2000);
+}
+
+
+// 发送数据
+$("#send").click(function(){
+    if(sendPost) return false;
+    
+    addSendText('');
+    var textarea = document.getElementById("textarea").value;
+    document.getElementById("textarea").value = '';
+    tlElem.scrollTop = tlElem.scrollTop*10;
+    
+    var sendT = 'wxq';
+    if(textarea.length<2){
+        addSendText('<b style="color:#F00;">输入的内容过短，请重新输入！</b>');
+        delSendText(0);
+        return false;
+    }
+    if(t=='twq' && textarea.indexOf('提问')==0){
+        if(confirm('您的信息以"提问"开头，是否发布为"提问"？')) sendT = 'twq';
+    }else if(t=='xyq' && textarea.indexOf('许愿')==0){
+        if(confirm('您的信息以"许愿"开头，是否发布为"许愿"？')) sendT = 'xyq';
+    }else if(t=='dtb' && textarea.indexOf('答题')==0){
+        if(confirm('您的信息以"答题"开头，是否发布为"答题"？')) sendT = 'dtb';
+    }
+    $.post("index.php?m=phone&c=index&a=post&catid=101&aid=825&uid=31790423&t="+sendT+"&pw=3c4528dd77ccdb3dc85e5f9c594ac0ad&replyid="+replyID+"&replyname="+replyName,
+    {
+        textarea:textarea
+    },
+    function(data,status){
+        var sendtype = 0;
+        //alert("Data: " + data + "\nStatus: " + status);
+        if(data){
+            if(data.indexOf('|')>0){
+                var dataArr= new Array();
+                dataArr = data.split("|");
+                //alert(data);
+                
+                //minAudit = minAudit<dataArr[2] ? minAudit : dataArr[2];
+                //maxAudit = maxAudit>dataArr[2] ? maxAudit : dataArr[2];
+                
+                //$("#sendtext td").html('<b style="color:green;line-height:22px;">'+dataArr[1]+'</b>');
+                addSendText('<b style="color:#090;">'+dataArr[1]+'</b>');
+                var time13 = Date.parse(new Date());
+                if($("#replyBar #type").text()=='取消' || replyID || replyName){
+                    // 回复
+                    var spancp = $("#tr"+replyID+" .inter #reply li").size();
+                    if(spancp=='undefined') spancp = 0;
+                    $("#tr"+replyID+" .inter #reply").removeClass("none");
+                    spancp++;
+                    $("#tr"+replyID+" #btn_comment").html($("#tr"+replyID+" #btn_comment").html()+'<span id="count_comment">('+spancp+')</span>');
+                    $("#tr"+replyID+" .inter #reply").prepend('<li>123：'+textarea+' ['+formatDateTime(time13,timeFormat)+']</li>');
+                    //alert($("#tr"+replyID+" .inter").html());
+                    // 恢复设置
+                    replyID = 0;
+                    replyName = '';
+                    $("#replyBar #type").css("background","#555555");
+                    $("#replyBar #type").css("border-color","#888888");
+                    $("#replyBar #type").text('刷新');
+                    $("#replyBar #type").css("color","#ffffff");
+                    
+                    sendtype = 1;
+                }else{
+                    // 上墙
+                    var uinfo = '';
+                    uinfo += '<b>123</b>';
+                    var timestr = '';
+                    if(show_time) timestr = '['+formatDateTime(time13,timeFormat)+']';  // 判断是否需要显示时间
+                    $("#list").append('<tr id="tr'+dataArr[0]+'"><th></th><td align="right"><div class="main">'+textarea+'</div><p style="text-align:right;"><a href="javascript:void(0);" onclick="praise('+dataArr[0]+');" id="btn_praise">赞一个</a>&nbsp;&nbsp;<a href="javascript:void(0);" onclick="reply('+dataArr[0]+',"123");" id="btn_comment">评论</a>&nbsp;&nbsp;'+timestr+'</p><div class="inter"><div id="praise" class="none"></div><ul id="reply" class="none"></ul></div></td><th >'+uinfo+'</th></tr>');
+                }
+            }else{
+                //alert('不存在|');
+                addSendText('<b style="color:#F00;">'+data+'</b>');
+                //$("#sendtext td").html('<b style="color:red;">'+data+'</b>');
+            }
+        }else{
+            addSendText('<b style="color:#F00;">网络异常，请重试！</b>');
+            document.getElementById("textarea").value = textarea;
+        }
+        delSendText(sendtype);
+        //alert("Data: " + data + "\nStatus: " + status);
+    });
+});
+
+function scroolControl(id){
+/*  if(oriScrollTop>tlElem.scrollTop) showHeader();
+    oriScrollTop = tlElem.scrollTop;
+    if(tlElem.scrollTop < idTitleHeight){
+        getText(id);
+        $("#title").addClass("none");
+        $("#mode").addClass("none");
+    }
+    if(!tlElem.scrollTop){
+        getJSON();
+    }*/
+    $("#title").addClass("none");
+    $("#mode").addClass("none");
+    getJSON(id);
+}
+
+$("#getold").click(function(){ if(!getJSONStatus){scroolControl('getold');} });
+$("#getnew").click(function(){ if(!getJSONStatus){scroolControl('getnew');} });
+
+//tlElem.onclick = function(){ if(!getJSONStatus){scroolControl();}};
+tlElem.onscroll = function(){
+    if(oriScrollTop<tlElem.scrollTop) showHeader(); else { $("#title").addClass("none"); $("#mode").addClass("none");}
+    oriScrollTop = tlElem.scrollTop;
+}
+
+function praise(id){
+    //alert(id);
+    $.get("index.php?m=phone&c=index&a=praise&catid=101&aid=825&uid=31790423&nickname=123&t=wxq&pw=3c4528dd77ccdb3dc85e5f9c594ac0ad&praise="+id,
+    function(data,status){
+        //alert(data+','+status);
+        if(data=='-1'){
+            alert('您已经赞过了 ^O^');
+        }else if(data=='1'){
+            $("#tr"+id+" p #btn_praise").attr("onclick","");
+            var oldPraise = $("#tr"+id+" .inter #praise").html();
+            if(oldPraise.length>0){
+                $("#tr"+id+" .inter #praise").html(oldPraise+"<span>123</span>");
+            }else{
+                $("#tr"+id+" .inter #praise").html("<img src=\"__STATIC__/phone/images/inter_praise_blue.png\" /><span>123</span>");
+                $("#tr"+id+" .inter #praise").removeClass("none");
+            }
+            var countPraise = $("#tr"+id+" p #count_praise").text();
+            if(countPraise.length>0){
+                var count = parseInt(countPraise)+1;
+                $("#tr"+id+" p #count_praise").text(count);
+            }else{
+                var praiseHtml = $("#tr"+id+" p #btn_praise").html();
+                $("#tr"+id+" p #btn_praise").html(praiseHtml+'(<span id="count_praise">1</span>)');
+            }
+        }else{
+            alert(data);
+        }
+    });
+}
+
+function type(){
+    if($("#replyBar #type").text()=='取消'){
+        var tav = document.getElementById("textarea").value;
+        if(tav.length>0){
+            if(!confirm('确定放弃本次评论？')) return false;
+        }
+        replyID = 0;
+        replyName = '';
+        $("#replyBar #type").css("background","#555555");
+        $("#replyBar #type").css("border-color","#888888");
+        $("#replyBar #type").text('刷新');
+        $("#replyBar #type").css("color","#ffffff");
+        document.getElementById("textarea").value = '';
+    }else{
+        javascript:location.reload();
+    }
+}
+
+function reply(id,name){
+    $("#replyBar #type").css("background","#C60");
+    $("#replyBar #type").css("border-color","#a65300");
+    $("#replyBar #type").text('取消');
+    $("#replyBar #type").css("color","#ffffff");
+    document.getElementById("textarea").focus();
+    replyID = id;
+    replyName = name;
+}
+
+// 显示图片
+function showImg(src){
+    $("#showImg td").html('<img src="'+src+'" class="img" onclick="closeImg();" /><img src="__STATIC__/phone/images/close.png" class="close" onclick="closeImg();" />');
+    $("#showImg").removeClass("none");
+}
+// 关闭图片
+function closeImg(){
+    $("#showImg").addClass("none");
+}
+
+</script>

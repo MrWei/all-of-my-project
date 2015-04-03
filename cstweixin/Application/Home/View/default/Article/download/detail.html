@@ -1,0 +1,15 @@
+
+<extend name="Base/common"/>
+<block name="body">
+     <div id="tech_content">
+   <div class="top blue">
+     <h3>{$info.title}</h3>
+   </div>
+   <div class="view">
+    {$info.content|htmlspecialchars_decode}
+   </div>
+ </div>
+</block>
+<block name="footer">
+<include file="Public/footer"/>
+</block>

@@ -1,0 +1,41 @@
+<extend name="Base/common"/>
+<block name="body">
+<div id="setbox" class="wide radius5">
+  <div class="top blue">
+    <h2>{$field.realname}</h2>
+    <img src="__IMG__/logo_big.png" width="65">
+  </div>
+  <div class="con">
+    <ul class="userinfo" style="overflow:hidden">
+      <li><img src="__IMG__/u1.png" width="16">手机　{$field.mobile}</li>
+      <li><img src="__IMG__/u2.png" width="16">邮箱　{$field.email}</li>
+      <li><img src="__IMG__/u3.png" width="16">单位　{$field.company}</li>
+      <li><img src="__IMG__/u4.png" width="16">部门　{$field.department}</li>
+      <li><img src="__IMG__/u5.png" width="16">工业电子ID　{$field.eid}</li>
+      <li><img src="__IMG__/u5.png" width="16">个性化标签　{$field.label}</li>
+    </ul>
+     <div class="blank10"></div>
+     <div class="order">
+    <if condition="$field['order']" >
+      您已经邮件订阅工业技术动态
+    <else />
+      您还未邮件订阅工业技术动态
+    </if>
+    </div>  
+    <div class="blank20"></div>
+      <div class="btnbox_left">
+          <a href="{:U('Public/loginOut')}" class="btn blue radius3" >退出</a>
+        </div>
+      <div class="btnbox">
+      <a href="{:U('edit')}" class="btn blue radius3" >编辑</a>
+  </div>
+  </div>
+</div>
+</block>
+<block name="footer">
+<include file="Public/footer"/>
+</block>
+<block name="script">
+ <script type="text/javascript">
+ </script>
+</block>

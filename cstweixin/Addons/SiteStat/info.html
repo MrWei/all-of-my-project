@@ -1,0 +1,37 @@
+ <div class="container-span top-columns cf">
+	<dl class="show-num-mod">
+		<dt><i class="count-icon user-count-icon"></i></dt>
+		<dd>
+			<a href="{:U('Member/Weixinuser')}"><strong>{$info.wxuser}</strong></a>
+			<span>新增微信关注</span>
+		</dd>
+	</dl>
+	<dl class="show-num-mod">
+		<dt><i class="count-icon user-count-icon"></i></dt>
+		<dd>
+			<a href="{:U('Member/getcode')}"><strong>{$info.userApply}</strong></a>
+			<span>新增用户申请</span>
+		</dd>
+	</dl>
+	<dl class="show-num-mod">
+		<dt><i class="count-icon doc-count-icon"></i></dt>
+		<dd>
+			<a href="{:U('Feedback/technology')}"><strong>{$info.technologyApply}</strong></a>
+			<span>待处理技术反馈</span>
+		</dd>
+	</dl>
+	<dl class="show-num-mod">
+		<dt><i class="count-icon doc-count-icon"></i></dt>
+		<dd>
+			<a href="{:U('Feedback/product')}"><strong>{$info.productApply}</strong></a>
+			<span>待处理产品反馈</span>
+		</dd>
+	</dl>
+	<dl class="show-num-mod">
+		<dt><i class="count-icon group-count-icon"></i></dt>
+		<dd>
+			<a href="{:U('Member/index',array('gid'=>1))}"><strong>{$info.users}</strong></a>
+			<span>网站总用户</span>
+		</dd>
+	</dl>
+</div>

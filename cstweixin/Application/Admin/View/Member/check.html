@@ -1,0 +1,64 @@
+<extend name="Public/base" />
+<block name="body">
+  <div class="main-title">
+    <h2>{$meta_title}</h2>
+  </div>
+  <form action="" method="post" class="form-horizontal">
+    <input type="hidden" name="openid" value="{$field.openid}">
+    <input type="hidden" name="applyid" value="{:I('applyid')}">
+    <div class="form-item">
+      <label class="item-label"> 姓名 <span class="check-tips">（用户的姓名）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="realname" value="{$field.username}">
+      </div>
+    </div>
+    <div class="form-item">
+      <label class="item-label"> email <span class="check-tips">（用户的email）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="email" value="{$field.email}">
+      </div>
+    </div>
+        <div class="form-item">
+      <label class="item-label"> 用户分组 <span class="check-tips">（请选择用户分组）</span> </label>
+      <div class="controls">
+        <select id="gid" name="gid">
+          <option value="">请选择用户分组</option>
+          <foreach name="usergroup" item="vo">
+          <option value="{$key}">{$vo}</option>
+         </foreach>
+        </select>
+      </div>
+    </div>
+      <div class="form-item">
+      <label class="item-label"> 邀请码 <span class="check-tips">（请输入邀请码）</span> </label>
+      <div class="controls">
+        <input type="text" class="text input-large" name="code" value="">
+      </div>
+    </div>
+    <div class="blank15"></div>
+    <div class="form-item">
+      <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+      <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+    </div>
+  </form>
+</block>
+<block name="script">
+  <script type="text/javascript">
+    $(function(){
+        $('.keylist li').each(function(index){
+           $(this).click(function(){
+              oldkey = $("input[name='label']").val();
+              oldkey =  oldkey ? oldkey + ',' : oldkey; 
+              num=(oldkey.split(',')).length-1; 
+              if (num>4) {
+                $('.checktip').text('最多5个关键字');
+                return false;
+              };
+              key = oldkey + $(this).html()
+              _str =$("input[name='label']").val(key)
+           })
+        })
+    })
+   highlight_subnav('{:U('Member/getcode')}');
+  </script>
+</block>

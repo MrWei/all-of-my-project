@@ -1,0 +1,92 @@
+<extend name="Public/base" />
+<script type="text/javascript" src="__JS__/common.js"></script>
+<block name="body">
+
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>{$meta_title}</h2>
+	</div>
+	<div class="cf">
+     <div class="fl">
+        <button id="ids" onmouseOver="copyAll('ids')" class="btn">复制</button>
+    </div>
+    </div>    
+	<!-- 数据列表 -->
+    <div class="data-table table-striped">
+	<table id="checkbox">
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th width="50">ID</th>
+		<th width="">邮箱</th>
+		<th width="100">用户</th>
+		<th width="100">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="indexlist">
+		<volist name="indexlist" id="vo">
+		<tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.id}" /></td>
+			<td>{$vo.id} </td>
+			<td><input type="text" name="" id="eamil_{$vo.id}" value="{$vo.email}" class="text" ></td>
+			<td>{$vo.realname}</td>
+			<td><a href="javascript:void(0)" class="copyBtn" id="copy_{$vo.id}" onmouseOver="toClipboard(this.id,'eamil_{$vo.id}')">复制</a></td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> {:C('EMPTY_DATA')}</td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$_page}
+    </div>
+</block>
+
+<block name="script">
+	<script type="text/javascript">
+	// 复制
+	 function getid(id) { return document.getElementById(id); }
+	/**
+	* cid 当前复制按钮的id
+	* tid 需要复制文本的 id
+	**/
+	function toClipboard( cid , tid ){
+	    var clip = new ZeroClipboard.Client();
+	    ZeroClipboard.setMoviePath( '__JS__/ZeroClipboard.swf' );
+	    clip.setHandCursor(true);
+	    clip.setText(getid(tid).value);
+	    clip.addEventListener('complete', function (client) {
+	        alert("复制成功!");
+	    });
+	    clip.glue(cid);
+	}
+
+	function copyAll(cid){
+		var inputs = $("#checkbox input[name='id[]']");
+    	var ids = new Array();
+    	for(var i = 0; i < inputs.length; i ++){
+    		if( inputs[i].checked ) ids.push(inputs[i].value);
+    	} 
+    	if( ids.length ){
+	   		$.post( "{:U('copyAll')}",{id:ids},function(data){
+			   	if( data.status ){
+			   		var clip = new ZeroClipboard.Client();
+				    ZeroClipboard.setMoviePath( '__JS__/ZeroClipboard.swf' );
+				    clip.setHandCursor(true);
+				    clip.setText(data.msg);
+				    clip.addEventListener('complete', function (client) {
+				        alert("复制成功!");
+				    });
+				    clip.glue(cid);
+			   	}else{
+			   		alert(data.msg)
+			   	}	
+			},'json')
+		}
+	}
+    highlight_subnav('{:U('Member/subscribe')}');
+	</script>
+</block>

@@ -1,0 +1,85 @@
+<extend name="Public/base" />
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>{$meta_title}</h2>
+	</div>
+    <form action="{:U('chatsearch')}" method="post">
+	<div class="data-title-table">
+		<table>
+			<tr>
+				<th>用户</th>
+				<td>
+				<select name="openid" class="input-3x">
+                    <option value="">请选择用户</option>    
+    				<foreach name="users" item="vo">
+                    <option {$vo.selected} value="{$vo.openid}">{$vo.realname}</option>
+                  </foreach>
+              </select>
+          </td>
+          	<th>时间</th>
+          	<td><input type="text" id="time-start" name="startTime" class="text input-2x" value="" placeholder="起始时间" />-<input type="text" id="time-end" name="endTime" class="text input-2x" value="" placeholder="结束时间" /></td>
+          	<th>关键词</th>
+          	<td><input type="text" value="{:I('get.keywords')}" name="keywords" class="text input-4x"></td>
+          	<td><input type="submit" value="搜索" class="btn" /></td>
+			</tr>
+		</table>
+	</div>
+    </form>
+    <!-- 数据列表 -->
+    <div class="data-table table-striped">
+	<table>
+    <thead>
+        <tr>
+		<th width="200">用户</th>
+		<th>留言信息</th>
+		<th width="150">时间</th>
+	</tr>
+    </thead>
+    <tbody>
+		<notempty name="indexlist">
+		<volist name="indexlist" id="vo">
+		<tr>
+            <td>{$vo.openid|get_realname_fromopenid}</td>
+            <td>{$vo.content}</td>
+            <td>{$vo.create_time|time_format}</td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="3" class="text-center"> {:C('EMPTY_DATA')}</td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$_page}
+    </div>
+</block>
+<block name="script">
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+    <php>if(C('COLOR_STYLE')=='blue_color') echo '<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">';</php>
+    <link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript">
+    //导航高亮
+    highlight_subnav('{:U('Weixin/chat')}');
+
+     $(function(){
+        $('#time-start').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+
+    $('#time-end').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+    })
+	</script>
+</block>

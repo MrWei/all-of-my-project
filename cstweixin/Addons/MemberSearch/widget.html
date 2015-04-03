@@ -1,0 +1,61 @@
+<div class="span{$addons_config.width}">
+  <div class="columns-mod">
+    <div class="hd cf">
+      <h5>{$addons_config.title}</h5>
+      <div class="title-opt"></div>
+    </div>
+    <div class="bd">
+      <form action="{:U('Member/Membersearch')}" method="post">
+      <div class="searchbox">
+        <table>
+           <tr>
+            <th>真实姓名</th>
+            <td><input type="text" name="realname" class="text input-6x" placeholder="请输入姓名支持模糊搜索"></td>
+          </tr>
+          <tr>
+            <th>邮箱</th>
+            <td><input type="text" name="email" class="text input-6x" placeholder="请输入邮箱支持模糊搜索"></td>
+          </tr>
+          <tr>
+            <th>手机号</th>
+            <td><input type="text" name="mobile" class="text input-6x" placeholder="请输入手机号支持模糊搜索"></td>
+          </tr>
+          <tr>
+            <th>单位</th>
+            <td>
+               <select name="companyid" class="input-4x">
+                <option value="">请选择单位</option>
+                <foreach name="field.company" item="vo">
+                <option value="{$vo.id}">{$vo.title}</option>
+              </foreach>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>标签</th>
+            <td>
+              <select name="labelid" class="input-4x">
+                <option value="">请选择标签</option>
+                <foreach name="field.label" item="vo">
+                <option value="{$vo.id}">{$vo.title}</option>
+              </foreach>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>状态</th>
+            <td>
+               <select name="status" class="input-4x">
+                <foreach name="field.status" item="vo">
+                <option value="{$key}">{$vo}</option>
+              </foreach>
+              </select>
+            </td>
+          </tr>
+        </table>
+        <div class="inputSubmit"><input type="submit" value="搜索" class="btn" /></div>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>

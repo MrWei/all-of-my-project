@@ -1,0 +1,23 @@
+<extend name="Base/common"/>
+<block name="body">
+  <div class="smodtitle blue">{$info.title}</div>
+  <div id="banner" class="banner">
+    <div class="icon">
+      <ul>
+      </ul>
+    </div>
+    <div class="slide">
+      <ul>
+        <li> <a href="javascript:void(0)"> <img src="__ROOT__{$info.cover_1|get_cover='path'}" /> </a> </li>
+        <li> <a href="javascript:void(0)"> <img src="__ROOT__{$info.cover_2|get_cover='path'}"/> </a> </li>
+        <li> <a href="javascript:void(0)"> <img src="__ROOT__{$info.cover_3|get_cover='path'}"/> </a> </li>
+      </ul>
+    </div>
+  </div>
+  <div id="smodbox" class="wide">
+  {$info.content|htmlspecialchars_decode}
+  </div>
+</block>
+<block name="footer">
+<include file="Public/footer"/>
+</block>

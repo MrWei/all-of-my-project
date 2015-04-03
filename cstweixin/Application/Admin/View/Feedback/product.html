@@ -1,0 +1,64 @@
+<extend name="Public/base" />
+
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>{$meta_title}</h2>
+	</div>
+	<div class="cf">
+		<div class="fl">
+            <button class="btn ajax-post" url="{:U('Feedback/state',array('method'=>'product','status'=>0))}" target-form="ids">设为待处理</button>
+            <button class="btn ajax-post" url="{:U('Feedback/state',array('method'=>'product','status'=>1))}" target-form="ids">设为正在处理</button>
+            <button class="btn ajax-post" url="{:U('Feedback/state',array('method'=>'product','status'=>2))}" target-form="ids">设为已答复</button>
+            <button class="btn ajax-post confirm" url="{:U('Feedback/product_delete',array('method'=>'product'))}" target-form="ids">批量删除</button>
+        </div>
+    </div>    
+    <!-- 数据列表 -->
+    <div class="data-table table-striped">
+	<table>
+    <thead>
+        <tr>
+		<th class="row-selected row-selected"><input class="check-all" type="checkbox"/></th>
+		<th width="50">ID</th>
+		<th width="">产品</th>
+		<th width="80">类型</th>
+		<th width="150">反馈时间</th>
+		<th width="100">用户</th>
+		<th width="60">状态</th>
+		<th width="100">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="indexlist">
+		<volist name="indexlist" id="vo">
+		<tr>
+            <td><input class="ids" type="checkbox" name="id[]" value="{$vo.id}" /></td>
+			<td>{$vo.id} </td>
+			<td>{$vo.title}</td>
+			<td>{$vo.ptype_text}</td>
+			<td>{$vo.create_time|time_format}</td>
+			<td>{$vo.realname}</td>
+			<td>{$vo.status_text}</td>
+			<td>
+				<a href="{:U('view',array('methond'=>'product','id'=>$vo['id']))}">查看</a>
+				<a class="ajax-get confirm" href="{:U('Feedback/deletedo',array('method'=>'product','id'=>$vo['id']))}">删除</a></td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="9" class="text-center"> {:C('EMPTY_DATA')}</td>
+		</notempty>
+	</tbody>
+    </table>
+	</div>
+    <div class="page">
+        {$_page}
+    </div>
+</block>
+
+<block name="script">
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js"></script>
+	<script type="text/javascript">
+    //导航高亮
+    highlight_subnav('{:U('Feedback/product')}');
+	</script>
+</block>

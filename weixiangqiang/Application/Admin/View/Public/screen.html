@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <title></title>
+    <script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="__SCREEN__/js/common.js"></script>
+    <script type="text/javascript" src="__JS__/jquery.mousewheel.js"></script>
+    <link rel="stylesheet" href="__SCREEN__/css/style.css" />
+    <block name="style"></block>
+</head>
+<body>
+    <div id="wide">
+        <block name="body"> </block> 
+        <!-- 导航  -->
+        <div id="navbar">
+            <div class="bcbox"></div>
+            <div class="item">
+                <ul class="nav">
+                    <li><img src="__SCREEN__/images/menu_kaimuqiang.png" alt="" /><a href="{:U('Screen/index',array('eid'=>$eid))}">开幕墙</a></li>
+                    <li><img src="__SCREEN__/images/menu_xuyuanqiang.png" alt="" /><a href="{:U('Screen/wish',array('eid'=>$eid))}">许愿墙</a></li>
+                    <li><img src="__SCREEN__/images/menu_dapingmu.png" alt="" /><a href="{:U('Screen/Weixin',array('eid'=>$eid))}">微信墙</a></li>
+                    <li><img src="__SCREEN__/images/menu_choujiang.png" alt="" /><a href="{:U('Screen/Luckdraw',array('eid'=>$eid))}">抽奖</a></li>
+                    <li><img src="__SCREEN__/images/menu_weipingfen.png" alt="" /><a href="{:U('Screen/score',array('eid'=>$eid))}">微评分</a></li>
+                    <li><img src="__SCREEN__/images/menu_bimuqiang.png" alt="" /><a href="{:U('Screen/closing',array('eid'=>$eid))}">闭幕墙</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+<block name="script"></block>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<extend name="Public/base" />
+<block name="body">
+  <!-- 标题栏 -->
+  
+  <div class="main-title">
+    <h2>{$meta_title}</h2>
+  </div>
+  <!-- 数据列表 -->
+  <div class="data-table table-striped">
+    <table>
+      <thead>
+        <tr>
+          <th colspan="2">查看用户 {$field.realname} 的信息反馈</th>
+        </tr>
+      </thead>
+      <tbody>
+        <if condition="$method eq 'product'">
+        <tr>
+          <td width="150" style='text-align:right'>产品：</td>
+          <td>{$field.title}</td>
+        </tr>
+         <tr>
+          <td width="150" style='text-align:right'>类型：</td>
+          <td>{$field.ptype|get_product_type}</td>
+        </tr>
+        <else />
+        <tr>
+          <td width="150" style='text-align:right'>标题：</td>
+          <td>{$field.title}</td>
+        </tr>
+        </if>
+        <tr>
+          <td width="150" style='text-align:right'>描述：</td>
+          <td>{$field.p_description}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>希望的反馈方式：</td>
+          <td>{$field.type_text}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>反馈时间：</td>
+          <td>{$field.create_time|time_format}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>希望的反馈时间：</td>
+          <td>{$field.time_text}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>关键词：</td>
+          <td>{$field.keywords}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>用户：</td>
+          <td>{$field.realname}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>手机号：</td>
+          <td>{$field.mobile}</td>
+        </tr>
+        <tr>
+          <td width="150" style='text-align:right'>邮箱：</td>
+          <td>{$field.email}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="blank20"></div>
+    <div class="form-item">
+      <button class="btn submit-btn" id="submit" type="submit" onclick="history.go(-1);" >返回</button>
+    </div>
+  </div>
+</block><block name="script">
+  <script type="text/javascript">
+    //导航高亮
+    highlight_subnav("{:U('Feedback/' . $method )}");
+  </script>
+</block>

@@ -1,0 +1,53 @@
+     
+     
+<extend name="Public/base"/>
+<block name="body">
+  <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+  <div class="main-title">
+    <h2>{$info['id']?'编辑':'添加'}活动</h2>
+  </div>
+  <div class="tab-wrap">
+    <ul class="tab-nav nav">
+      <li class="current"><a href="javascript:void(0)">基本</a></li>
+      <li ><a href="javascript:void(0)">账号</a></li>
+      <li ><a href="javascript:void(0)">开幕墙</a></li>
+      <li ><a href="javascript:void(0)">许愿墙</a></li>
+      <li ><a href="javascript:void(0)">微信墙</a></li>
+      <li ><a href="javascript:void(0)">抽奖</a></li>
+      <li ><a href="javascript:void(0)">微评分</a></li>
+    </ul>
+    <div class="tab-content">
+      <form action="{:U('update')}" method="post" class="form-horizontal">
+        
+
+        <div class="form-item">
+          <label class="item-label"></label>
+          <div class="controls">
+            <button type="submit" class="btn submit-btn ajax-post" target-form="form-horizontal">确 定</button>
+            <button class="btn btn-return" onClick="javascript:history.back(-1);return false;">返 回</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</block>
+<block name="style">
+  <style type="text/css">
+    .activityTab{display: none;}
+    .text{float: left;}
+    .uploadify{float: left; position: relative; top: 1px; margin-left: 10px;}
+  </style>
+</block>
+<block name="script">
+  <link href="__STATIC__/datetimepicker/css/datetimepicker.css" rel="stylesheet" type="text/css">
+  <php>if(C('COLOR_STYLE')=='blue_color') echo '
+    <link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css" rel="stylesheet" type="text/css">
+    ';</php>
+  <link href="__STATIC__/datetimepicker/css/dropdown.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script> 
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script> 
+  <script type="text/javascript">
+      //
+      highlight_subnav('{:U('Award/add')}');
+  </script> 
+</block>

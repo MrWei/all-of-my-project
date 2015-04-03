@@ -1,0 +1,33 @@
+<extend name="Base/common"/>
+<block name="side"></block>
+<block name="body">
+<div id="banner" class="banner">
+    <div class="icon">
+      <ul>
+      </ul>
+  </div>
+    <div class="slide">
+    <ul>
+         <article:artlist name="article" category="4" row="3"> 
+        <li><a href="{:U('Article/detail?id='.$article['id'])}"><img src="__ROOT__{$article.cover_id|get_cover='path'}" /></a></li>
+        </article:artlist>
+      </ul>
+  </div>
+  </div>
+<div id="main">
+    <ul class="technology">
+    <article:artlist name="article" category="2" row="4">    
+    <li class="radius5"><a href="{:U('Article/detail?id='.$article['id'])}"><img src="__ROOT__{$article.cover_id|get_cover='path'}" alt="">
+      <div class="item">
+        <h2> <span class="icon"></span> {$article['title']}</h2>
+        <p class="info">{$article.description|msubstr=0,30}</p>
+      </div>
+      </a>
+    </li>
+    </article:artlist>
+  </ul>
+  </div>
+</block>
+<block name="footer">
+<include file="Public/footer"/>
+</block>

@@ -1,0 +1,16 @@
+<extend name="Base/common"/>
+<block name="body">
+	 <div id="tech_content">
+   <div class="top blue">
+     <img src="__ROOT__{$info.cover_id|get_cover='path'}" width="62" height="62" />
+     <h2>{$info.title}</h2>
+     <p class="info">{$info.description|msubstr=0,14}</p>
+   </div>
+   <div class="view">
+    {$info.content|htmlspecialchars_decode}
+   </div>
+ </div>
+</block>
+<block name="footer">
+<include file="Public/footer"/>
+</block>
